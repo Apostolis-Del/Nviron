@@ -1,5 +1,5 @@
 const {model, Schema } = require('mongoose');
-
+//it can autopopulate if something doesnt exist
 const postSchema = new Schema({
     body: String,
     username: String,
