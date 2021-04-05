@@ -17,7 +17,7 @@ function generateToken(user){
     );
 
 }
-
+//ta args edw einai apo ta typedefs(ta args pou exoume orisei sta mutations)
 module.exports = {
     Mutation: {
         async login(_,{username,password}){
@@ -44,6 +44,8 @@ module.exports = {
                 token
             };
         },
+
+        //kanoume destructure to registerinput gia na mporoume na paroume ta data pio katw
         async register(
             _,
             {registerInput:{username,email,password,confirmPassword}}
@@ -53,15 +55,25 @@ module.exports = {
             if(!valid){
                 throw new UserInputError('Errors',{errors});
             }
-            //Make use user doesnt already exist
-            const user= User.findOne({username});
-            if(!user){
+            //Make sure user doesnt already exist
+            const user=await User.findOne({username});
+            if(user) {
                 throw new UserInputError('Username is taken',{
                     errors:{
                         username:' This username is taken'
                     }
-                })
+                });
             }
+
+            const emailsame=await User.findOne({email});
+            if(emailsame) {
+                throw new UserInputError('Email is taken',{
+                    errors:{
+                        email:' This email is taken'
+                    }
+                });
+            }
+            
             // Hash password and create auth token
             password= await bcrypt.hash(password, 12);
             
@@ -71,10 +83,11 @@ module.exports = {
                 password,
                 createdAt: new Date().toISOString()
             });
-
+            //save to database
             const res = await newUser.save();
 
             const token = generateToken(res);
+            //mongoose document
             return {
                 ...res._doc,
                 id:res._id,
