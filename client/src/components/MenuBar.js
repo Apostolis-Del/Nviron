@@ -1,9 +1,12 @@
-import React, { useState } from 'react'
-import { Menu } from 'semantic-ui-react'
-import {Link} from 'react-router-dom'
+import React, { useContext, useState } from 'react';
+import { Menu } from 'semantic-ui-react';
+import {Link} from 'react-router-dom';
+import {AuthContext} from '../context/auth';
 
 function MenuBar() {
     
+  //kanoyme destructure to context(sto login.js den xreiazotan destructure gt tha itan confusing)
+  const {user,logout}=useContext(AuthContext);
 
   //auto edw einai gia na ta allazoume apo tin grammi panw(autin pou exei i istoselida)
  const pathname = window.location.pathname;
@@ -12,9 +15,28 @@ function MenuBar() {
 
  const handleItemClick = (e, { name }) => setActiveItem(name);
 
-    return (
-      
-        <Menu pointing secondary size="massive" color="teal">
+//ena or gia na epistrefoume diaforetika MenuBars
+const MenuBar = user ?(
+
+  <Menu pointing secondary size="massive" color="teal">
+          <Menu.Item
+            name={user.username}
+            active
+            as={Link}
+            to="/"
+          />
+          <Menu.Menu position='right'>
+            <Menu.Item
+                name='logout'
+                onClick={logout}
+            />    
+          </Menu.Menu>
+        </Menu>
+
+
+):(
+
+  <Menu pointing secondary size="massive" color="teal">
           <Menu.Item
             name='home'
             active={activeItem === 'home'}
@@ -40,8 +62,10 @@ function MenuBar() {
           </Menu.Menu>
         </Menu>
 
-       
-    )
+);
+
+//kanoume return to MenuBar sto view analoga me to ti authcontext exoume
+return MenuBar
   
 }
 export default MenuBar;
