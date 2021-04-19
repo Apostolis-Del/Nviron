@@ -76,7 +76,7 @@ function Login(props) {
                     onChange={onChange}
                 />
                 
-                <Button type="sumbit" primary>
+                <Button type="submit" color="green" >
                     Login
                 </Button>
             </Form>

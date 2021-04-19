@@ -1,12 +1,21 @@
-import React,{useContext} from 'react';
+import React,{useContext , useState} from 'react';
 import { useQuery, gql } from '@apollo/client';
-import { Grid,Transition, GridColumn, Image } from 'semantic-ui-react';
+import { Grid,Transition, GridColumn, Header,Image,Container,Segment,Message } from 'semantic-ui-react';
 import '../App.css';
 import {AuthContext} from '../context/auth';
-
 import PostCard from '../components/PostCard';
 import PostForm from '../components/PostForm';
-import { FETCH_POSTS_QUERY } from '../util/graphql';
+import ActForm from '../components/ActForm';
+import OrgForm from '../components/OrgForm';
+import OrganizationCard from '../components/OrganizationCard';
+import Map from '../components/Map';
+import { FETCH_POSTS_QUERY,FETCH_ORGANIZATIONS_QUERY } from '../util/graphql';
+import 'leaflet/dist/leaflet.css';
+import {Marker, Popup, TileLayer } from 'react-leaflet';
+
+import CardCarousel from "../components/CardCarousel";
+import ImageCarousel from "../components/ImageCarousel";
+import "pure-react-carousel/dist/react-carousel.es.css";
 
 function Home() {
 
@@ -16,11 +25,58 @@ function Home() {
     //edw ginetai destructure ta posts (to ? legetai ternary)
     const { getPosts: posts } = data ? data : [];
 
+    const{loadingOrgs,data: dataOrgs } =useQuery(FETCH_ORGANIZATIONS_QUERY);
+    const{ getOrganizations: orgs} = dataOrgs? dataOrgs:[];
+
+    const [markerPosition, setMarkerPosition] = useState({
+        lat: 49.8419,
+        lng: 24.0315
+      });
+      const { lat, lng } = markerPosition;
+    
+      function moveMarker() {
+        setMarkerPosition({
+          lat: lat + 0.0001,
+          lng: lng + 0.0001
+        });
+      }
+
     if(data){
         console.log(data);
     }
+    if(dataOrgs){
+        console.log(dataOrgs);
+    }
+
 	return (
-        <Grid columns={3} divided>
+        <>
+
+    <  Container style={{ margin: 20 }}>
+      <Segment attached="bottom" >
+        <ImageCarousel />
+      </Segment>
+      
+    </Container>
+    <  Container style={{ margin: 20 }}>
+
+    <Grid.Row className="page-title">
+            <h1 style = {{ marginBottom : 20, marginTop:60}}>Enviromental Actions</h1>
+    </Grid.Row>
+
+    <Segment attached="bottom" >
+        <div>
+            <Map markerPosition={markerPosition} />
+            <div>
+                Current markerPosition: lat: {lat}, lng: {lng}
+            </div>
+            <button onClick={moveMarker}>Move marker</button>
+           
+        </div>
+        </Segment>
+
+        </Container>
+
+        <Grid columns={2} divided>
         <Grid.Row className="page-title">
             <h1>Recent Posts</h1>
         </Grid.Row>
@@ -47,7 +103,67 @@ function Home() {
             </Transition.Group>
          )}
         </Grid.Row>
+        <Container>
+
+        <Segment padded>
+        {//if user
+            user && (
+                <div>
+                    <Transition.Group>
+                    <Segment className="page-title">
+                    <h1>Create a new Organization</h1>
+                    </Segment>
+                    {/* <ActForm/> */}
+                    <OrgForm/>
+                    </Transition.Group>
+                </div>
+            )
+            }
+        </Segment>
+
+        <Segment padded>
+        {//if user
+            user && (
+                <div>
+                    <Transition.Group>
+                    <Segment className="page-title">
+                    <h1>Create a new Action (next to map)</h1>
+                    </Segment>
+                    {/* <ActForm/> */}
+                    <ActForm/>
+                    </Transition.Group>
+                </div>
+            )
+            }
+        </Segment>
+
+        </Container>
+        <Grid.Row className="page-title">
+            <h1>Recent Organizations</h1>
+        </Grid.Row>
+        
+        <Grid.Row>
+        
+       
+          
+         {loadingOrgs?(
+             <h1>Loading Posts...</h1>
+         ):(
+            <Transition.Group>
+                {
+                     orgs && orgs.map(org=>(
+                        <Grid.Column key={org.id} style={{marginBottom:20}}>
+                           <OrganizationCard org={org}/>
+                        </Grid.Column>
+                    ))
+                }
+            </Transition.Group>
+         )}
+        </Grid.Row>
+        
     </Grid>
+    
+    </>
     );
 }
 

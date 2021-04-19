@@ -29,6 +29,9 @@ module.exports = gql`
         token: String!
         username: String!
         createdAt: String!
+        #diko mou
+        isOwnerOrg:Organization
+        isOwnerAct:Action
     }
     input RegisterInput{
         username: String!
@@ -38,15 +41,25 @@ module.exports = gql`
     }
     type Query {
         getPosts: [Post]
-      getPost(postId: ID!): Post
+        getPost(postId: ID!): Post
+        getOrganizations: [Organization]
+        getActions:[Action]
      }
     #dika mou
     type Organization{
         id:ID!
         orgName:String!
         orgDescription:String!
-        orgAction:[Action]
+        orgActions:[Action]
         orgPosts:[Post]
+        orgLocationLat:Float!
+        orgLocationLong:Float!
+        orgType:String!
+        orgOwner:User!
+    }
+    input OrganizationInput{
+        orgName:String!
+        orgDescription:String!
         orgLocationLat:Float!
         orgLocationLong:Float!
         orgType:String!
@@ -58,7 +71,16 @@ module.exports = gql`
         actLocationLat:Float!
         actLocationLong:Float!
         actType:String!
+        actOrg:Organization
+        actOwner:User!
         #sto type prepei na epilegei anamesa se 6 types klp
+    }
+    input ActionInput{
+        actName:String!
+        actDescription:String!
+        actLocationLat:Float!
+        actLocationLong:Float!
+        actType:String!
     }
     #telos dikwn mou
     #registeInput of type RegisterInput
@@ -70,6 +92,9 @@ module.exports = gql`
         createComment(postId:ID!,body:String!):Post!
         deleteComment(postId:ID!,commentId:ID!):Post!
         likePost(postId:ID!):Post!
+        #dika mou apo katw
+        createOrg(organizationInput:OrganizationInput):Organization!
+        createAction(actionInput:ActionInput):Action!
     }
     type Subscription{
         newPost:Post!

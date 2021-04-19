@@ -21,3 +21,19 @@ export const FETCH_POSTS_QUERY = gql`
     }
   }
 `;
+
+export const FETCH_ORGANIZATIONS_QUERY = gql`
+  {
+    
+    getOrganizations{
+    	id
+   		orgName
+   	 	orgDescription
+
+      orgOwner{
+      username
+      }
+    }
+
+  }
+`;

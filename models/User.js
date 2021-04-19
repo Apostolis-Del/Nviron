@@ -5,7 +5,17 @@ const userSchema = new Schema({
     username: String,
     password: String,
     email: String,
-    createdAt: String
+    createdAt: String,
+
+    //dika mou
+    isOwnerOrg:{
+        type:Schema.Types.Mixed,
+        ref:"organizations"
+    },
+    isOwnerAct:{
+        type:Schema.Types.Mixed,
+        ref:"actions"
+    }
 });
 
 module.exports = model('User',userSchema);

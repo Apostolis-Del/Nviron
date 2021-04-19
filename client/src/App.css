@@ -6,6 +6,74 @@
 }
 
 .form-container{
-    width:400px;
+    width:100%;
     margin:auto;
 }
+
+.leaflet-container {
+    width: 100%;
+    height: 50vh;
+  }
+/*hero */
+.heroBlock {
+    background: url('https://free4kwallpapers.com/uploads/originals/2017/05/04/kalampaka-greece-by-guill%C3%A9n-p%C3%A9rez-wallpaper.jpg') no-repeat;
+    background-position: 50% 100%;
+    background-size: cover;
+    height: 100vh;
+  }
+  
+.heroBlock .container-fluid {
+    display: block !important;
+  }
+  
+.heroBlock .ant-carousel,
+.heroBlock .ant-carousel div {
+    height: 100%;
+}
+  
+.heroBlock .slick-dots li button {
+    background: #000 !important;
+}
+  
+.heroBlock .slick-dots li.slick-active button {
+    background: #1890ff !important;
+}
+  
+.heroBlock .content {
+    max-width: 640px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: 0 0 70px;
+}
+  
+.heroBlock h3 {
+    font-size: 30px;
+    line-height: 1.2;
+    margin: 0 0 30px;
+}
+  
+.heroBlock p {
+    margin: 0 0 30px;
+  }
+  
+.heroBlock .btnHolder {
+    height: auto !important;
+  }
+  
+.heroBlock .btnHolder button,
+.heroBlock .btnHolder .fas {
+    margin: 0 10px 0 0;
+}
+
+.ant-carousel .slick-slide {
+    text-align: center;
+    height: 160px;
+    line-height: 160px;
+    background: #364d79;
+    overflow: hidden;
+  }
+  
+  .ant-carousel .slick-slide h3 {
+    color: #fff;
+  }

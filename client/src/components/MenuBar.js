@@ -1,7 +1,8 @@
 import React, { useContext, useState } from 'react';
-import { Menu } from 'semantic-ui-react';
+import { Menu,Image,Item } from 'semantic-ui-react';
 import {Link} from 'react-router-dom';
 import {AuthContext} from '../context/auth';
+import logo from '../img/logo.png'
 
 function MenuBar() {
     
@@ -18,14 +19,22 @@ function MenuBar() {
 //ena or gia na epistrefoume diaforetika MenuBars
 const MenuBar = user ?(
 
-  <Menu pointing secondary size="massive" color="teal">
-          <Menu.Item
+  <Menu pointing secondary size="massive" color="green">
+          
+          <Item.Image style={{background:"no-repeat" ,
+              width:"100px",
+              right: "0px",
+              height:"70px",
+              display:"block"
+              }} size='massive' src={logo}/>
+
+          <Menu.Menu position='right'>
+          <Menu.Item 
             name={user.username}
             active
             as={Link}
             to="/"
           />
-          <Menu.Menu position='right'>
             <Menu.Item
                 name='logout'
                 onClick={logout}
@@ -36,14 +45,16 @@ const MenuBar = user ?(
 
 ):(
 
-  <Menu pointing secondary size="massive" color="teal">
-          <Menu.Item
-            name='home'
-            active={activeItem === 'home'}
-            onClick={handleItemClick}
-            as={Link}
-            to="/"
-          />
+  <Menu pointing secondary size="massive" color="green" >
+          <Item.Image style={{background:"no-repeat" ,
+                    width:"120px",
+                    top: "-10px",
+                    height:"70px",
+                    display:"block"
+                    }} size='massive' active={activeItem === 'home'}  name='home'
+                    as={Link} to="/"
+                    src={logo}/>
+         
           <Menu.Menu position='right'>
             <Menu.Item
                 name='login'

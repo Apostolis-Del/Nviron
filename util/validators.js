@@ -40,3 +40,32 @@ module.exports.validateLoginInput= (username,password) =>{
         valid:Object.keys(errors).length<1
     }
 }
+module.exports.validateOrgInput=(orgName,orgDescription,orgLocationLat,orgLocationLong,orgType)=>{
+    if(orgName.trim()===''){
+        errors.username = 'Organization Name must not be empty';
+    }
+    if(orgDescription.trim()===''){
+        errors.username = 'Organization Description must not be empty';
+    }
+    if(orgLocationLat.trim()===''){
+        errors.username = 'Organization Latitude Location must not be empty';
+    }
+    if(orgLocationLong.trim()===''){
+        errors.username = 'Organization Longitude Location must not be empty';
+    }
+}
+
+module.exports.validateActInput=(actName,actDescription,actLocationLat,actLocationLong,actType)=>{
+    if(actName.trim()===''){
+        errors.username = 'Action Name must not be empty';
+    }
+    if(actDescription.trim()===''){
+        errors.username = 'Action Description must not be empty';
+    }
+    if(actLocationLat.trim()===''){
+        errors.username = 'Action Latitude Location must not be empty';
+    }
+    if(actLocationLong.trim()===''){
+        errors.username = 'Action Longitude Location must not be empty';
+    }
+}
