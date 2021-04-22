@@ -6,15 +6,15 @@ import {AuthContext} from '../context/auth';
 import PostCard from '../components/PostCard';
 import PostForm from '../components/PostForm';
 import ActForm from '../components/ActForm';
-import OrgForm from '../components/OrgForm';
-import OrganizationCard from '../components/OrganizationCard';
+import OrgForm from '../components/orgcomponents/OrgForm';
+import OrganizationCard from '../components/orgcomponents/OrganizationCard';
 import Map from '../components/Map';
-import { FETCH_POSTS_QUERY,FETCH_ORGANIZATIONS_QUERY } from '../util/graphql';
+import { FETCH_POSTS_QUERY,FETCH_ORGANIZATIONS_QUERY,FETCH_ORGPOSTS_QUERY } from '../util/graphql';
 import 'leaflet/dist/leaflet.css';
 import {Marker, Popup, TileLayer } from 'react-leaflet';
-
-import CardCarousel from "../components/CardCarousel";
-import ImageCarousel from "../components/ImageCarousel";
+import OrgPostCard from '../components/orgcomponents/OrgPostCard';
+import CardCarousel from "../components/carouselcomponents/CardCarousel";
+import ImageCarousel from "../components/carouselcomponents/ImageCarousel";
 import "pure-react-carousel/dist/react-carousel.es.css";
 
 function Home() {
@@ -27,6 +27,12 @@ function Home() {
 
     const{loadingOrgs,data: dataOrgs } =useQuery(FETCH_ORGANIZATIONS_QUERY);
     const{ getOrganizations: orgs} = dataOrgs? dataOrgs:[];
+
+
+    const{loadingOrgPosts,data: dataOrgPosts } =useQuery(FETCH_ORGPOSTS_QUERY);
+    const{ getOrgPosts: orgposts} = dataOrgPosts? dataOrgPosts:[];
+
+     console.log("ta org posts",orgposts);
 
     const [markerPosition, setMarkerPosition] = useState({
         lat: 49.8419,
@@ -90,7 +96,7 @@ function Home() {
             )
             }   
          {loading?(
-             <h1>Loading Posts...</h1>
+             <h1>Loading Users' Posts...</h1>
          ):(
             <Transition.Group>
                 {
@@ -147,13 +153,36 @@ function Home() {
        
           
          {loadingOrgs?(
-             <h1>Loading Posts...</h1>
+             <h1>Loading Organizations...</h1>
          ):(
             <Transition.Group>
                 {
                      orgs && orgs.map(org=>(
                         <Grid.Column key={org.id} style={{marginBottom:20}}>
-                           <OrganizationCard org={org}/>
+                                <OrganizationCard org={org}/>
+                        </Grid.Column>
+                    ))
+                }
+            </Transition.Group>
+         )}
+        </Grid.Row>
+
+        <Grid.Row className="page-title">
+            <h1>Recent Organizations' Posts</h1>
+        </Grid.Row>
+        
+        <Grid.Row>
+        
+       
+          
+         {loadingOrgs?(
+             <h1>Loading Organizations's Posts...</h1>
+         ):(
+            <Transition.Group>
+                {
+                     orgposts && orgposts.map(orgpost=>(
+                        <Grid.Column key={orgpost.id} style={{marginBottom:20}}>
+                                <OrgPostCard orgpost={orgpost}/>
                         </Grid.Column>
                     ))
                 }

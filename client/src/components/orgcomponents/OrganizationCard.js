@@ -2,10 +2,11 @@ import React,{useContext} from 'react';
 import {Card,Icon,Label,Image,Button,Popup} from 'semantic-ui-react';
 import moment from 'moment';
 import {Link} from 'react-router-dom';
-import {AuthContext} from '../context/auth';
-import LikeButton from './LikeButton';
-import DeleteButton from './DeleteButton';
-import MyPopup from '../util/MyPopup';
+import {AuthContext} from '../../context/auth';
+import LikeButton from '../LikeButton';
+import DeleteButton from '../DeleteButton';
+import MyPopup from '../../util/MyPopup';
+import DeleteOrg from './DeleteOrg';
 
 function OrganizationCard({org:{orgName,orgDescription,orgOwner,id}}){
 
@@ -33,9 +34,24 @@ function OrganizationCard({org:{orgName,orgDescription,orgOwner,id}}){
                 </Card.Description>
             </Card.Content>
             <Card.Content extra>
+            {/* <LikeButton user ={user} post={{id,likes,likeCount}}/>
+                    {
+                        //bgazei ena thema me dom nesting edw
+                    }
+                <MyPopup content="Comment on Post">
+                    <Button labelPosition='right' as={Link} to={`/posts/${id}`}>
+                            <Button basic color='blue'>
+                                <Icon name='comments' />
+                                Comment
+                            </Button>
+                            <Label as='a' basic color='blue' pointing='left'>
+                                {commentCount}
+                            </Label>
+                        </Button>
+                </MyPopup> */}
                 {//edw tsekare ean o user einai o idioktitis tou post kai ean einai bazoume
                  //to delete button
-                 user && user.username === orgOwner && <DeleteButton postId={id}/>}
+                 user && user.username === orgOwner.username && <DeleteOrg orgId={id}/>}
             </Card.Content>
         </Card>
     );

@@ -3,7 +3,6 @@ const {model, Schema } = require('mongoose');
 const organizationSchema = new Schema({
 
     orgName: String,
-    orgName: String,
     orgDescription: String,
     orgLocationLat: Number,
     orgLocationLong: Number,

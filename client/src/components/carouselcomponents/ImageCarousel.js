@@ -1,13 +1,13 @@
 import { CarouselProvider, Image, Slide, Slider } from "pure-react-carousel";
 import React from "react";
 import { Divider } from "semantic-ui-react";
-import logo1 from '../img/kalampaka.jpg'; // with import
-import logo2 from '../img/portkatsiki.jpg'; // with import
-import logo3 from '../img/ecology2.jpg'; // with import
+import logo1 from '../../img/kalampaka.jpg'; // with import
+import logo2 from '../../img/portkatsiki.jpg'; // with import
+import logo3 from '../../img/ecology2.jpg'; // with import
 
 
 
-import CustomDotGroup from "../components/CustomDotGroup";
+import CustomDotGroup from "./CustomDotGroup";
 
 // const mystyle={
 //   width:"100%",

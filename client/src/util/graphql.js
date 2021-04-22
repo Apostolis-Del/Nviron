@@ -29,11 +29,35 @@ export const FETCH_ORGANIZATIONS_QUERY = gql`
     	id
    		orgName
    	 	orgDescription
-
       orgOwner{
-      username
+      username id 
       }
-    }
+      
 
+  }
+  }
+`;
+
+export const FETCH_ORGPOSTS_QUERY = gql`
+  {
+    
+    getOrgPosts{
+    	id
+   		body
+      username
+   	 	createdAt
+      orgname
+      likes {
+        username
+      }
+      commentCount
+      likeCount
+      comments {
+        id
+        username
+        createdAt
+        body
+      }
+  }
   }
 `;

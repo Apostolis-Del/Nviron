@@ -81,7 +81,9 @@ module.exports = {
                 email,
                 username,
                 password,
-                createdAt: new Date().toISOString()
+                createdAt: new Date().toISOString(),
+                isOwnerOrg:{},
+                isOwnerAct:{}
             });
             //save to database
             const res = await newUser.save();

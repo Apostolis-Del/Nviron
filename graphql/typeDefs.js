@@ -12,6 +12,18 @@ module.exports = gql`
         likeCount: Int!
         commentCount: Int!
      }
+     type OrgPost {
+        id: ID!
+        body: String!
+        createdAt: String!
+        username: String!
+        orgname:String
+        org:Organization
+        comments: [Comment]!
+        likes: [Like]!
+        likeCount: Int!
+        commentCount: Int!
+     }
     type Comment{
         id: ID!
         createdAt: String!
@@ -42,7 +54,11 @@ module.exports = gql`
     type Query {
         getPosts: [Post]
         getPost(postId: ID!): Post
+        getOrgPosts: [OrgPost]
+        getOrgPost(postId: ID!): OrgPost
         getOrganizations: [Organization]
+        getOrganization(orgId: ID!): Organization
+        getOrganizationsbyName(orgName: String!): [Organization]
         getActions:[Action]
      }
     #dika mou
@@ -51,7 +67,7 @@ module.exports = gql`
         orgName:String!
         orgDescription:String!
         orgActions:[Action]
-        orgPosts:[Post]
+        orgPosts:Post
         orgLocationLat:Float!
         orgLocationLong:Float!
         orgType:String!
@@ -95,6 +111,12 @@ module.exports = gql`
         #dika mou apo katw
         createOrg(organizationInput:OrganizationInput):Organization!
         createAction(actionInput:ActionInput):Action!
+        createOrgPost(body:String!):OrgPost!
+        deleteOrgPost(postId:ID!):String!
+        likeOrgPost(postId:ID!):OrgPost!
+        createOrgComment(postId:ID!,body:String!):OrgPost!
+        deleteOrgComment(postId:ID!,commentId:ID!):OrgPost!
+        deleteOrg(orgId:ID!):String!
     }
     type Subscription{
         newPost:Post!

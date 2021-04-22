@@ -1,5 +1,6 @@
 const Organization = require('../../models/Organization');
 const User = require('../../models/User');
+const Post = require('../../models/Post');
 const checkAuth= require('../../util/check-auth');
 const {AuthenticationError, UserInputError}= require('apollo-server');
 const { argsToArgsConfig } = require('graphql/type/definition');
@@ -13,6 +14,27 @@ module.exports = {
             }catch(err){
                 throw new Error(err);
             }
+        },
+        async getOrganizationsbyName(_,{orgName}){
+            try{
+                const organizations= await Organization.find({orgName});
+                console.log(organizations);
+                return organizations;
+            }catch(err){
+                throw new Error(err);
+            }
+        },
+        async getOrganization(_,{orgId}){
+            try{
+                const org = await Organization.findById(orgId);
+                if(org){
+                    return org;
+                }else{
+                    throw new Error('Organization not found');
+                }
+            }catch(err){
+                throw new Error(err);
+            }
         }
     },
     Mutation:{
@@ -21,11 +43,21 @@ module.exports = {
                 const user= checkAuth(context);
                 
                 //TODO EDW PREPEI NA KANOUME VALIDATE TA STOIXEIA
-
-                console.log(user);
+                
+               // console.log(user);
                /* if(body.trim()===''){
                     throw new Error('Organization body must not be empty');
                 }*/
+
+                const orgnamesame=await Organization.findOne({orgName});
+
+                if(orgnamesame) {
+                    throw new UserInputError('Organization Name is taken',{
+                        errors:{
+                            email:' This Organization Name is taken'
+                        }
+                    });
+                }
                 //twra mporei na kanei allow to action pou tou dinoume na kanei
                 const newOrganization= new Organization({
                     orgName,
@@ -33,7 +65,7 @@ module.exports = {
                     orgLocationLat,
                     orgLocationLong,
                     orgType,
-                    orgOwner: {...user}
+                    orgOwner: {...user},
                 });
 
               
@@ -63,10 +95,27 @@ module.exports = {
                         console.log("Something wrong when updating data!");
                     }
                 
-                    console.log(doc);
+                   // console.log(doc);
                 });
 
                 return organization;
             }
+            
+     ,
+      async deleteOrg(_,{orgId} , context){
+        const user = checkAuth(context);
+
+        try{
+            const org = await Organization.findById(orgId);
+            if(user.username === org.orgOwner.username){
+                await org.delete();
+                return 'Organization deleted successfully';
+            }else {
+                throw new AuthenticationError('Action not allowed');
+            }
+        }catch(err){
+            throw new Error(err);
+        }
+    }
     }
 }

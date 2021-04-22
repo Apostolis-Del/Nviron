@@ -1,8 +1,8 @@
 import { CarouselProvider, Slider } from "pure-react-carousel";
 import React from "react";
 
-import CustomCardSlide from "../components/CustomCardSlide";
-import CustomDotGroup from "../components/CustomDotGroup";
+import CustomCardSlide from "./CustomCardSlide";
+import CustomDotGroup from "./CustomDotGroup";
 
 const CardCarousel = () => (
   <CarouselProvider

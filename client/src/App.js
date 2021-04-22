@@ -13,6 +13,7 @@ import { Container } from 'semantic-ui-react';
 import {AuthProvider} from './context/auth';
 import AuthRoute from './util/authRoute';
 import SinglePost from './pages/SinglePost';
+import SingleOrgPost from './pages/SingleOrgPost';
 
 function App() {
   return (
@@ -24,6 +25,7 @@ function App() {
       <AuthRoute exact path='/login' component={Login}/>
       <AuthRoute exact path='/register' component={Register}/>
       <Route exact path='/posts/:postId' component={SinglePost}/>
+      <Route exact path='/orgposts/:postId' component={SingleOrgPost}/>
       </Container>
     </Router>
     </AuthProvider>
