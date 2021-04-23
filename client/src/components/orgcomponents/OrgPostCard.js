@@ -42,7 +42,7 @@ function OrgPostCard({orgpost:{body,orgname,createdAt,id,username,likeCount,comm
                          //bgazei ena thema me dom nesting edw
                      }
                  <MyPopup content="Comment on Post">
-                     <Button labelPosition='right' as={Link} to={`/posts/${id}`}>
+                     <Button labelPosition='right' as={Link} to={`/orgposts/${id}`}>
                              <Button basic color='blue'>
                                  <Icon name='comments' />
                                  Comment

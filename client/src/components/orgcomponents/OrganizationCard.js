@@ -49,6 +49,11 @@ function OrganizationCard({org:{orgName,orgDescription,orgOwner,id}}){
                             </Label>
                         </Button>
                 </MyPopup> */}
+                <Button labelPosition='right' as={Link} to={`/organizations/${id}`}>
+                            <Button basic color='green'>
+                                Go to {orgName}'s Page
+                            </Button>
+                </Button>
                 {//edw tsekare ean o user einai o idioktitis tou post kai ean einai bazoume
                  //to delete button
                  user && user.username === orgOwner.username && <DeleteOrg orgId={id}/>}

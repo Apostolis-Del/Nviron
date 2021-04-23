@@ -26,6 +26,16 @@ Query :{
         }catch(err){
             throw new Error(err);
         }
+    },
+    async getOrgPostsByName(_,{orgname}){
+        try{
+            //var query={postId}
+            const posts= await OrgPost.findOne({orgname}).sort({ createdAt: -1 });
+            console.log(posts);
+            return posts;
+        }catch(err){
+            throw new Error(err);
+        }
     }
     },
     //mesa sto context yparxei to request body

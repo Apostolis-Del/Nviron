@@ -77,3 +77,16 @@
   .ant-carousel .slick-slide h3 {
     color: #fff;
   }
+  .img-organizationpage{
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+    width: 100%;
+    height:337px;
+  }
+  .header-organizationpage{
+    display:block !important;
+    text-align: center;
+    font-size:2rem;
+    margin-top:26px;
+  }

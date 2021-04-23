@@ -22,11 +22,14 @@ const MenuBar = user ?(
   <Menu pointing secondary size="massive" color="green">
           
           <Item.Image style={{background:"no-repeat" ,
-              width:"100px",
-              right: "0px",
-              height:"70px",
-              display:"block"
-              }} size='massive' src={logo}/>
+                    width:"120px",
+                    top: "-10px",
+                    height:"70px",
+                    display:"block"
+                    }} size='massive' active={activeItem === 'home'}  name='home'
+                    as={Link} to="/"
+                    src={logo}
+              />
 
           <Menu.Menu position='right'>
           <Menu.Item 

@@ -17,7 +17,7 @@ module.exports = {
         },
         async getOrganizationsbyName(_,{orgName}){
             try{
-                const organizations= await Organization.find({orgName});
+                const organizations= await Organization.find(orgName);
                 console.log(organizations);
                 return organizations;
             }catch(err){

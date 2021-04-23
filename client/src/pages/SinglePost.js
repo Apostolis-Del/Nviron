@@ -25,7 +25,7 @@ function SinglePost(props){
             postId
         }
     })
-
+    console.log(getPost);
     const [submitComment] = useMutation(SUBMIT_COMMENT_MUTATION,{
         update(){
             setComment('');
@@ -48,7 +48,7 @@ function SinglePost(props){
         postMarkup = <p>Loading post.....</p>
     }else{
         const {id,body,createdAt,username,comments,likes,likeCount,commentCount}=getPost;
-
+        console.log(getPost);
         postMarkup=(
             <Grid>
                 <Grid.Row>
