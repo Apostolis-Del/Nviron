@@ -47,7 +47,7 @@ function SingeOrgPost(props){
         //perimenoume na fortosei, mporoume na balooume kai kyklo pou gyrnaei
         postMarkup = <p>Loading Organization Post.....</p>
     }else{
-        const {id,body,createdAt,username,comments,likes,likeCount,commentCount}=getOrgPost;
+        const {id,body,createdAt,username,orgname,comments,likes,likeCount,commentCount}=getOrgPost;
 
         postMarkup=(
             <Grid>
@@ -61,7 +61,7 @@ function SingeOrgPost(props){
                     <Grid.Column width={10}>
                         <Card fluid>
                             <Card.Content>
-                                <Card.Header>{username}</Card.Header>
+                                <Card.Header>{orgname}</Card.Header>
                                 <Card.Meta>{moment(createdAt).fromNow()}</Card.Meta>
                                 <Card.Description>{body}</Card.Description>
                             </Card.Content> 
@@ -148,7 +148,7 @@ const SUBMIT_ORGCOMMENT_MUTATION =gql`
 const FETCH_ORGPOST_QUERY = gql`
     query($postId:ID!){
         getOrgPost(postId: $postId){
-            id body createdAt username likeCount
+            id body createdAt username likeCount orgname
             likes{
                 username
             }

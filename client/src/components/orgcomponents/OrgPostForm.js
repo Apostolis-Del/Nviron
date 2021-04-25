@@ -3,42 +3,41 @@ import { Button, Form } from 'semantic-ui-react';
 import gql from 'graphql-tag';
 import { useMutation } from '@apollo/react-hooks';
 
-import { useForm } from '../util/hooks';
-import { FETCH_POSTS_QUERY } from '../util/graphql';
+import { useForm } from '../../util/hooks';
+import { FETCH_ORGPOSTS_QUERY } from '../../util/graphql';
 
-function PostForm() {
-  const { values, onChange, onSubmit } = useForm(createPostCallback, {
+function OrgPostForm() {
+  const { values, onChange, onSubmit } = useForm(createOrgPostCallback, {
     body: ''
   });
-  console.log(values);
-  const [createPost, { error }] = useMutation(CREATE_POST_MUTATION, {
+
+  const [createOrgPost, { error }] = useMutation(CREATE_ORGPOST_MUTATION, {
     variables: values,
     //update replaces proxy with result
     update(proxy, result) {
-      console.log(result,"to prwto result")
       const data = proxy.readQuery({
-        query: FETCH_POSTS_QUERY
+        query: FETCH_ORGPOSTS_QUERY
       });
-      console.log(result,"to deutero result");
+      console.log(result);
       //edw prosthetoume to post mas sto getPosts gia na emfanizetai realtime
       proxy.writeQuery({
-        query: FETCH_POSTS_QUERY,
+        query: FETCH_ORGPOSTS_QUERY,
         data: {
-            getPosts: [result.data.createPost.body, ...data.getPosts]
+            getOrgPosts: [result.data.createOrgPost.body, ...data.getOrgPosts]
         }
     });   
        values.body = '';
     }
   });
 
-  function createPostCallback() {
-    createPost();
+  function createOrgPostCallback() {
+    createOrgPost();
   }
 
   return (
     <>
       <Form onSubmit={onSubmit}>
-        <h2>Create a post:</h2>
+        <h2>Create an organization post:</h2>
         <Form.Field>
           <Form.Input
             placeholder="Hi World!"
@@ -52,27 +51,28 @@ function PostForm() {
           </Button>
         </Form.Field>
       </Form>
-      {//to error to bazoume giati otan apla patame submit xwris na grapsoume kati 
+      {/* {//to error to bazoume giati otan apla patame submit xwris na grapsoume kati 
         //tote pairnoume graphql error
         error&&(
           <div className="ui error message" style={{marginBottom:20}}>
             <ul className="list">
-              <li>{error.graphQLErrors[0].message}</li>
+              <li>{error.graphQLErrors[0].extensions.code}</li>
             </ul>
           </div>
-      )}
+      )} */}
       
     </>
   );
 }
 
-const CREATE_POST_MUTATION = gql`
-  mutation createPost($body: String!) {
-    createPost(body: $body) {
+const CREATE_ORGPOST_MUTATION = gql`
+  mutation createOrgPost($body: String!) {
+    createOrgPost(body: $body) {
       id
       body
       createdAt
       username
+      orgname
       likes {
         id
         username
@@ -90,4 +90,4 @@ const CREATE_POST_MUTATION = gql`
   }
 `;
 
-export default PostForm;
+export default OrgPostForm;

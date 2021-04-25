@@ -30,7 +30,7 @@ Query :{
     async getOrgPostsByName(_,{orgname}){
         try{
             //var query={postId}
-            const posts= await OrgPost.findOne({orgname}).sort({ createdAt: -1 });
+            const posts= await OrgPost.find({orgname}).sort({ createdAt: -1 });
             console.log(posts);
             return posts;
         }catch(err){
@@ -60,7 +60,7 @@ Query :{
 
 
             if(body.trim()===''){
-                throw new Error('Post body must not be empty');
+                throw new Error('Org Post body must not be empty');
             }
             //console.log(user,isOwnerOrg.orgName)
             const {isOwnerOrg}=user;

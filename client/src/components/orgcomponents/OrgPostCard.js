@@ -28,7 +28,7 @@ function OrgPostCard({orgpost:{body,orgname,createdAt,id,username,likeCount,comm
                  size='mini'
                  src='https://react.semantic-ui.com/images/avatar/large/jenny.jpg'
                  />
-                 <Card.Header>{orgname}</Card.Header>
+                 <Card.Header>{orgname}edweinai to o</Card.Header>
                  
                  <Card.Meta as={Link} to={`/orgposts/${id}`}>{moment(createdAt).fromNow(true)}</Card.Meta>
                  <Card.Description>

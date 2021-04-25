@@ -15,14 +15,14 @@ function OrgDeleteButton({ orgId, callback }) {
     //otan mpei sto update simainei oti to post exei diagraftei epityxws
     update(proxy) {
       setConfirmOpen(false);
-      if (!orgId) {
+      if (orgId) {
         const data = proxy.readQuery({
             query: FETCH_ORGANIZATIONS_QUERY,
           });
           proxy.writeQuery({
             query: FETCH_ORGANIZATIONS_QUERY,
             data: {
-              getOrgs: data.getOrgs.filter(p => p.id !== orgId)
+              getOrganizations: data.getOrganizations.filter(p => p.id !== orgId)
             }
           });
       }

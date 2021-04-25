@@ -29,6 +29,9 @@ export const FETCH_ORGANIZATIONS_QUERY = gql`
     	id
    		orgName
    	 	orgDescription
+      orgLocationLat
+      orgLocationLong
+      orgType
       orgOwner{
       username id 
       }

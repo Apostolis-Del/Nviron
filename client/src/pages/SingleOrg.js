@@ -9,6 +9,7 @@ import OrgDeleteButton from '../components/orgcomponents/OrgDeleteButton';
 import DeleteButton from '../components/DeleteButton';
 import MyPopup from '../util/MyPopup';
 import OrgPostCard from '../components/orgcomponents/OrgPostCard'
+import OrgPostForm from '../components/orgcomponents/OrgPostForm';
 import { FETCH_ORGPOSTS_QUERY } from '../util/graphql';
 import '../App.css';
 
@@ -54,11 +55,13 @@ function SingleOrg(props){
        postMarkup = <p>Loading Organization Page.....</p>
    }
    else{
-       const {id,orgDescription,orgName,orgLocationLat,orgLocationLong}= getOrganization;
+       
+       const {id,orgDescription,orgName,orgOwner,orgLocationLat,orgLocationLong}= getOrganization;
+
        if(getOrgPostsByName.getOrgPostsByName){
-           console.log(getOrgPostsByName)
        const {body,username,createdAt,likeCount,commentCount} = getOrgPostsByName.getOrgPostsByName;
-       console.log(username,createdAt,body,likeCount,commentCount);}
+       }
+
        postMarkup=(
            <Grid>
                <Container >
@@ -73,15 +76,27 @@ function SingleOrg(props){
                        <h4 style={{textAlign:"center"}}>Organization Description:</h4>
                        <h3>{orgDescription}</h3>
                        </Segment>
-                   </Container>
-               <Grid.Row>
-                   <Grid.Column width={10}>
-                       {getOrgPostsByName.getOrgPostsByName &&(
-                        <OrgPostCard orgpost={getOrgPostsByName.getOrgPostsByName} />
-                       )
-                       }
-                   </Grid.Column>
-               </Grid.Row>
+                       <Segment>
+                          <h4> Add your Organization's location</h4> 
+                       </Segment>
+                </Container>
+                <Container>
+                <Grid.Row>
+                    <Segment>
+                    <Grid.Column width={10}>
+                            <Segment>
+                            {user && orgOwner.username===user.username &&(
+                                    <OrgPostForm />
+                            )}
+                            </Segment>
+                            {getOrgPostsByName.getOrgPostsByName &&getOrgPostsByName.getOrgPostsByName.map(orgpost=>(
+                                <OrgPostCard orgpost={orgpost} />
+                            ))
+                            }
+                    </Grid.Column>
+                    </Segment>
+                </Grid.Row>
+                </Container>
            </Grid>
        )
    }
@@ -98,6 +113,9 @@ const FETCH_SINGLEORG_QUERY=gql`
             orgDescription
             orgLocationLat
             orgLocationLong
+            orgOwner{
+                id username
+            }
             
         }
     }

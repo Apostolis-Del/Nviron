@@ -57,7 +57,7 @@ module.exports = gql`
         getOrgPosts: [OrgPost]
         getOrgPost(postId: ID!): OrgPost
         getOrganizations: [Organization]
-        getOrgPostsByName(orgname:String!):OrgPost
+        getOrgPostsByName(orgname:String!):[OrgPost]
         getOrganization(orgId: ID!): Organization
         getOrganizationsbyName(orgName: String!): [Organization]
         getActions:[Action]
