@@ -36,7 +36,7 @@ const MenuBar = user ?(
             name={user.username}
             active
             as={Link}
-            to="/"
+            to="/userprofile"
           />
             <Menu.Item
                 name='logout'

@@ -4,6 +4,7 @@ const commentsResolvers = require('./comments');
 const organizationsResolvers = require('./organizations');
 const actionResolvers = require('./actions');
 const orgpostResolvers = require('./orgposts')
+const filesResolvers = require('./files')
 
 //kati gia na einai ola mazi ta resolvers apta alla files kai na ta kanei export sto geniko index.js
 module.exports = {
@@ -25,11 +26,22 @@ module.exports = {
             return parent.comments.length;
         }
     },
+    Action:{
+        //auto einai ena modifier kai kathe fora pou kaloume kati(pou kaleitai mutation i subscription ) pernaei apo auto to modifier
+        likeCount(parent){
+            return parent.likes.length;
+        },
+        commentCount(parent){
+            return parent.comments.length;
+        }
+    },
     Query: {
         ...postsResolvers.Query,
         ...organizationsResolvers.Query,
         ...actionResolvers.Query,
-        ...orgpostResolvers.Query
+        ...orgpostResolvers.Query,
+        ...filesResolvers.Query
+
     },
     Mutation: {
         ...usersResolvers.Mutation,
@@ -37,7 +49,8 @@ module.exports = {
         ...commentsResolvers.Mutation,
         ...organizationsResolvers.Mutation,
         ...actionResolvers.Mutation,
-        ...orgpostResolvers.Mutation
+        ...orgpostResolvers.Mutation,
+        ...filesResolvers.Mutation
     },
     Subscription:{
         ...postsResolvers.Subscription,

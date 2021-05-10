@@ -15,6 +15,8 @@ import AuthRoute from './util/authRoute';
 import SinglePost from './pages/SinglePost';
 import SingleOrgPost from './pages/SingleOrgPost';
 import SingleOrg from './pages/SingleOrg';
+import SingleAction from './pages/SingleAction';
+import UserProfile from './pages/UserProfile';
 
 function App() {
   return (
@@ -28,6 +30,8 @@ function App() {
       <Route exact path='/posts/:postId' component={SinglePost}/>
       <Route exact path='/orgposts/:postId' component={SingleOrgPost}/>
       <Route exact path='/organizations/:orgId' component={SingleOrg}/>
+      <Route exact path='/actions/:actId' component={SingleAction}/>
+      <Route exact path='/userprofile' component={UserProfile}/>
       </Container>
     </Router>
     </AuthProvider>

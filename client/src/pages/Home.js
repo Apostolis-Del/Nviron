@@ -5,14 +5,15 @@ import '../App.css';
 import {AuthContext} from '../context/auth';
 import PostCard from '../components/PostCard';
 import PostForm from '../components/PostForm';
-import ActForm from '../components/ActForm';
+import ActForm from '../components/actcomponents/ActForm';
 import OrgForm from '../components/orgcomponents/OrgForm';
 import OrganizationCard from '../components/orgcomponents/OrganizationCard';
 import Map from '../components/Map';
-import { FETCH_POSTS_QUERY,FETCH_ORGANIZATIONS_QUERY,FETCH_ORGPOSTS_QUERY } from '../util/graphql';
+import { FETCH_POSTS_QUERY,FETCH_ORGANIZATIONS_QUERY,FETCH_ORGPOSTS_QUERY,FETCH_ACTIONS_QUERY } from '../util/graphql';
 import 'leaflet/dist/leaflet.css';
 import {Marker, Popup, TileLayer } from 'react-leaflet';
 import OrgPostCard from '../components/orgcomponents/OrgPostCard';
+import ActionCard from '../components/actcomponents/ActionCard';
 import CardCarousel from "../components/carouselcomponents/CardCarousel";
 import ImageCarousel from "../components/carouselcomponents/ImageCarousel";
 import "pure-react-carousel/dist/react-carousel.es.css";
@@ -31,6 +32,9 @@ function Home() {
 
     const{loadingOrgPosts,data: dataOrgPosts } =useQuery(FETCH_ORGPOSTS_QUERY);
     const{ getOrgPosts: orgposts} = dataOrgPosts? dataOrgPosts:[];
+
+    const{loadingActs,data: dataActs} =useQuery(FETCH_ACTIONS_QUERY);
+    const{ getActions: acts} = dataActs? dataActs:[];
 
      console.log("ta org posts",orgposts);
 
@@ -69,16 +73,48 @@ function Home() {
             <h1 style = {{ marginBottom : 20, marginTop:60}}>Enviromental Actions</h1>
     </Grid.Row>
 
-    <Segment attached="bottom" >
-        <div>
-            <Map markerPosition={markerPosition} />
+    {user?(
+        <Segment attached="bottom" >
+            <Grid columns={2} relaxed='very'>
+            <Grid.Column>
+            <Segment>
             <div>
-                Current markerPosition: lat: {lat}, lng: {lng}
+                <Map markerPosition={markerPosition} />
+                <div>
+                    Current markerPosition: lat: {lat}, lng: {lng}
+                </div>
+                <button onClick={moveMarker}>Move marker</button>
+            
             </div>
-            <button onClick={moveMarker}>Move marker</button>
-           
-        </div>
+            </Segment>
+            </Grid.Column>
+            <Grid.Column  >
+                <div >
+                    <Transition.Group>
+                    <Segment className="page-title" >
+                    <h1>Create a new Action</h1>
+                    </Segment >
+                    <Segment >
+                    <ActForm />
+                    </Segment>
+                    </Transition.Group>
+                </div>
+            </Grid.Column>
+
+            </Grid>
         </Segment>
+        ):(
+            <Segment>
+            <div>
+                <Map markerPosition={markerPosition} />
+                <div>
+                    Current markerPosition: lat: {lat}, lng: {lng}
+                </div>
+                <button onClick={moveMarker}>Move marker</button>
+            
+            </div>
+            </Segment>
+        )}
 
         </Container>
 
@@ -127,22 +163,29 @@ function Home() {
             }
         </Segment>
 
-        <Segment padded>
-        {//if user
-            user && (
-                <div>
-                    <Transition.Group>
-                    <Segment className="page-title">
-                    <h1>Create a new Action (next to map)</h1>
-                    </Segment>
-                    {/* <ActForm/> */}
-                    <ActForm/>
-                    </Transition.Group>
-                </div>
-            )
-            }
-        </Segment>
-
+        
+        <Grid.Row className="page-title">
+            <h1>Recent Actions</h1>
+        </Grid.Row>
+        
+        <Grid.Row>
+        
+       
+          
+         {loadingOrgs?(
+             <h1>Loading Organizations...</h1>
+         ):(
+            <Transition.Group>
+                {
+                     acts && acts.map(act=>(
+                        <Grid.Column key={act.id} style={{marginBottom:20}}>
+                                <ActionCard act={act}/>
+                        </Grid.Column>
+                    ))
+                }
+            </Transition.Group>
+         )}
+        </Grid.Row>
         </Container>
         <Grid.Row className="page-title">
             <h1>Recent Organizations</h1>

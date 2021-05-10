@@ -1,10 +1,11 @@
 import React from 'react';
 import App from './App';
-import {ApolloClient} from '@apollo/client';
+import {ApolloClient, from} from '@apollo/client';
 import {InMemoryCache} from '@apollo/client';
 import {createHttpLink } from 'apollo-link-http';
 import {ApolloProvider} from '@apollo/react-hooks';
 import { setContext } from "@apollo/client/link/context";
+import {createUploadLink} from 'apollo-upload-client';
 import { onError } from '@apollo/client/link/error';
 
 const errorLink = onError(({ graphQLErrors, networkError }) => {
@@ -17,8 +18,8 @@ const errorLink = onError(({ graphQLErrors, networkError }) => {
     if (networkError) console.log(`[Network error]: ${networkError}`);
   });
 
-const httpLink = createHttpLink({
-    uri: 'http://localhost:5000',
+const httpLink = createUploadLink({
+    uri: 'http://localhost:5000/graphql',
     headers: { authorization: `bearer [token]` }
 })
 
@@ -31,8 +32,17 @@ const authLink = setContext(() => {
     };
   });
 
+// const uploadhelperLink = createUploadLink({
+//     uri: 'http://localhost:5000/graphql'
+// })
+
+const authhelperlink= authLink.concat(httpLink);
+
 const client = new ApolloClient({
-    link: authLink.concat(httpLink),
+    link:from([authhelperlink]),
+    //  link:createUploadLink({
+    //    uri:'http://localhost/5000/'
+    //  }),
     cache: new InMemoryCache()
 })
 

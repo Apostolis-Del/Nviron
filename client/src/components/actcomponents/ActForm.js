@@ -4,9 +4,9 @@ import gql from 'graphql-tag';
 import { useMutation ,useState} from '@apollo/react-hooks';
 
 import { useForm } from '../../util/hooks';
-import { FETCH_ORGANIZATIONS_QUERY } from '../../util/graphql';
+import { FETCH_ACTIONS_QUERY } from '../../util/graphql';
 
-function OrgForm(){
+function ActForm(){
 
     //const[errors,setErrors]=useState({});
 
@@ -19,11 +19,11 @@ function OrgForm(){
       { key: '5', text: "Agriculture",         value:"Agriculture",}
     ]
 
-    const {onChange, onSubmit, values } = useForm(createOrgCallback);
+    const {onChange, onSubmit, values } = useForm(createActionCallback);
     console.log(values)
 
-    values.orgLocationLat=parseFloat(values.orgLocationLat);
-    values.orgLocationLong=parseFloat(values.orgLocationLong);
+    values.actLocationLat=parseFloat(values.actLocationLat);
+    values.actLocationLong=parseFloat(values.actLocationLong);
     //values.orgType="sdf"
 
     const onChangeType = (e, {value}) => {
@@ -31,28 +31,28 @@ function OrgForm(){
       //console.log(e.target.textContent);
       const typename = e.target.textContent;
       //const bird_name2 = e.target.value;
-      values.orgType= typename;
+      values.actType= typename;
       //console.log(bird_name);
       //console.log(bird_name2);
 
     };
 
-    const [createOrg, { error }] = useMutation(CREATE_ORG_MUTATION, {
+    const [createAct, { error }] = useMutation(CREATE_ACT_MUTATION, {
         variables: values,
         //update replaces proxy with result
         update(proxy, result) {
           console.log(result);
           const data = proxy.readQuery({
-            query: FETCH_ORGANIZATIONS_QUERY
+            query: FETCH_ACTIONS_QUERY
           });
-          console.log(result.data.createOrg.values);
+          console.log(result.data.createAction.values);
           //edw prosthetoume to post mas sto getPosts gia na emfanizetai realtime
           proxy.writeQuery({
-            query: FETCH_ORGANIZATIONS_QUERY,
+            query: FETCH_ACTIONS_QUERY,
             data: {
-                 getOrganizations: [result.data.createOrg.orgDescription, result.data.createOrg.orgName,
-                  result.data.createOrg.orgLocationLat, result.data.createOrg.orgLocationLong,
-                  result.data.createOrg.orgType,   ...data.getOrganizations]
+                 getActions: [result.data.createAction.actDescription, result.data.createAction.actName,
+                  result.data.createAction.actLocationLat, result.data.createAction.actLocationLong,
+                  result.data.createAction.actType,   ...data.getActions]
                }
         });   
            //values.body = '';
@@ -63,8 +63,8 @@ function OrgForm(){
       //   getOrganizations: [result.data.createOrg.values, ...data.getOrganizations]
       // }
     
-    function createOrgCallback() {
-        createOrg();
+    function createActionCallback() {
+        createAct();
         //console.log(values)
     }
 
@@ -75,20 +75,20 @@ function OrgForm(){
             <Form.Group style={{marginTop:30}} widths='equal'>
                  <h5 style={{marginTop:10}}>Name:</h5>
                 <Form.Input 
-                    placeholder="Organization's name"
-                    name="orgName"
-                    size="large"
+                    placeholder="Action's Name"
+                    name="actName"
+                    size="medium"
                     onChange={onChange}
                     error={error ? true : false}
                     value={values.orgName}
                     // error={error ? true : false}
                 />
-                <h5 style={{marginTop:10,marginLeft:10}}>Latitude:</h5>
+                <h5 style={{marginTop:10,marginLeft:0}}>Latitude:</h5>
 
                  <Form.Input
-                    placeholder="Organization's latitude:"
-                    name="orgLocationLat"
-                    size="large"
+                    placeholder="Action's Latitude:"
+                    name="actLocationLat"
+                    size="medium"
                     type="number"
                     step="0.1"
                     onChange={onChange}
@@ -96,30 +96,35 @@ function OrgForm(){
                     value={values.orgLocationLat}
                 // error={error ? true : false}
                 />
-                <h5 style={{marginTop:10,marginLeft:10}}>Longitude:</h5>
+               
+               
+            </Form.Group>
+
+            <Form.Group>
+            <h5 style={{marginTop:10,marginLeft:0}}>Longitude:</h5>
                 <Form.Input
-                    placeholder="Organization's longitude:"
-                    name="orgLocationLong"
+                    placeholder="Action's Longitude:"
+                    name="actLocationLong"
                     type="number"
                     step="0.1"
-                    size="large"
+                    size="medium"
                     onChange={onChange}
                     error={error ? true : false}
                     value={values.orgLocationLong}
                 // error={error ? true : false}
                 />
-               
             </Form.Group>
 
             <Form.Group style={{marginTop:20}} widths='equal'>
-            <label style={{ fontWeight:"bold",marginRight:10,marginTop:10}}>Select Type:</label>
+            <label style={{ fontWeight:"bold",marginRight:10}}>Select Type:</label>
             <Dropdown
-                  placeholder='Types:'
+                  placeholder="Action's Type:"
                   fluid
                   search
                   selection
                   options={typeOptions}
                   onChange={onChangeType}
+                  style={{height:20}}
               />
                           
             </Form.Group>
@@ -128,10 +133,10 @@ function OrgForm(){
 
                 <h5 style={{marginTop:10}}>Description:</h5>
 
-                <Form.Input 
-                        placeholder="Organization's description"
-                        name="orgDescription"
-                        size="large"
+                <Form.TextArea 
+                        placeholder="Action's Description"
+                        name="actDescription"
+                        size="medium"
                         onChange={onChange}
                         value={values.orgDescription}
                         error={error ? true : false}
@@ -166,28 +171,28 @@ function OrgForm(){
               </div>
           )} */
 
-     const CREATE_ORG_MUTATION = gql`
-          mutation createOrg( 
-              $orgName:String!
-              $orgDescription:String!
-              $orgLocationLat:Float!
-              $orgLocationLong:Float!
-              $orgType:String!
+     const CREATE_ACT_MUTATION = gql`
+          mutation createAction( 
+              $actName:String!
+              $actDescription:String!
+              $actLocationLat:Float!
+              $actLocationLong:Float!
+              $actType:String!
               ){
-            createOrg(
-               organizationInput:{
-                    orgName:$orgName
-                    orgDescription:$orgDescription
-                    orgLocationLat:$orgLocationLat
-                    orgLocationLong:$orgLocationLong
-                    orgType:$orgType
+            createAction(
+               actionInput:{
+                    actName:$actName
+                    actDescription:$actDescription
+                    actLocationLat:$actLocationLat
+                    actLocationLong:$actLocationLong
+                    actType:$actType
                     }
                 ) {
-                id orgName orgDescription orgLocationLat orgLocationLong orgType
-                orgOwner{
+                id actName actDescription actLocationLat actLocationLong actType
+                actOwner{
                     username
                 }
                 }
           }
         `;
-export default OrgForm;
+export default ActForm;

@@ -11,6 +11,8 @@ import MyPopup from '../util/MyPopup';
 import OrgPostCard from '../components/orgcomponents/OrgPostCard'
 import OrgPostForm from '../components/orgcomponents/OrgPostForm';
 import { FETCH_ORGPOSTS_QUERY } from '../util/graphql';
+import FileUpload from '../components/FileUpload';
+import Uploads from '../components/Uploads'
 import '../App.css';
 
 
@@ -78,6 +80,11 @@ function SingleOrg(props){
                        </Segment>
                        <Segment>
                           <h4> Add your Organization's location</h4> 
+                       </Segment>
+                       <Segment>
+                          <h4> Add your file</h4> 
+                          <FileUpload />
+                           <Uploads />
                        </Segment>
                 </Container>
                 <Container>

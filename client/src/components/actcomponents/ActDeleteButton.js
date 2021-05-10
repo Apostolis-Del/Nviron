@@ -3,34 +3,33 @@ import gql from 'graphql-tag';
 import { useMutation } from '@apollo/react-hooks';
 import { Button, Confirm, Icon, Popup } from 'semantic-ui-react';
 
-import { FETCH_ORGPOSTS_QUERY } from '../../util/graphql';
+import { FETCH_ACTIONS_QUERY } from '../../util/graphql';
 import MyPopup from '../../util/MyPopup';
 
-function OrgDeleteButton({ postId, commentId, callback }) {
+function ActDeleteButton({ actId, commentId, callback }) {
   const [confirmOpen, setConfirmOpen] = useState(false);
 
-  const mutation = commentId ? DELETE_ORGCOMMENT_MUTATION : DELETE_ORGPOST_MUTATION;
+  const mutation = commentId ? DELETE_ACTCOMMENT_MUTATION : DELETE_ACTION_MUTATION;
 
-
-  const [deletePostOrMutation] = useMutation(mutation, {
+  const [deleteActorMutation] = useMutation(mutation, {
     //otan mpei sto update simainei oti to post exei diagraftei epityxws
     update(proxy) {
       setConfirmOpen(false);
       if (!commentId) {
         const data = proxy.readQuery({
-            query: FETCH_ORGPOSTS_QUERY,
+            query: FETCH_ACTIONS_QUERY,
           });
           proxy.writeQuery({
-            query: FETCH_ORGPOSTS_QUERY,
+            query: FETCH_ACTIONS_QUERY,
             data: {
-              getOrgPosts: data.getOrgPosts.filter(p => p.id !== commentId)
+              getActions: data.getActions.filter(p => p.id !== commentId)
             }
           });
       }
       if (callback) callback();
     },
     variables: {
-      postId,
+      actId,
       commentId
     }
   });
@@ -49,21 +48,21 @@ function OrgDeleteButton({ postId, commentId, callback }) {
       <Confirm
         open={confirmOpen}
         onCancel={() => setConfirmOpen(false)}
-        onConfirm={deletePostOrMutation}
+        onConfirm={deleteActorMutation}
       />
     </>
   );
 }
 
-const DELETE_ORGPOST_MUTATION = gql`
-  mutation deleteOrgPost($postId: ID!) {
-    deleteOrgPost(postId: $postId)
+const DELETE_ACTION_MUTATION = gql`
+  mutation deleteAct($actId: ID!) {
+    deleteAct(actId: $actId)
   }
 `;
 
-const DELETE_ORGCOMMENT_MUTATION = gql`
-  mutation deleteOrgComment($postId: ID!, $commentId: ID!) {
-    deleteOrgComment(postId: $postId, commentId: $commentId) {
+const DELETE_ACTCOMMENT_MUTATION = gql`
+  mutation deleteActComment($actId: ID!, $commentId: ID!) {
+    deleteActComment(actId: $actId, commentId: $commentId) {
       id
       comments {
         id
@@ -76,4 +75,4 @@ const DELETE_ORGCOMMENT_MUTATION = gql`
   }
 `;
 
-export default OrgDeleteButton;
+export default ActDeleteButton;

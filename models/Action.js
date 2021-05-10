@@ -8,6 +8,20 @@ const actionSchema = new Schema({
     actLocationLong:Number,
     actType:String,
     
+    comments: [
+        {
+            body:String,
+            username:String,
+            createdAt:String
+        }
+    ],
+    likes: [
+        {
+            username:String,
+            createdAt:String
+        }
+    ],   
+
     actOrg:{
         type:Schema.Types.Mixed,
         ref:'organizations'

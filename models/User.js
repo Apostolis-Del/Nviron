@@ -6,7 +6,7 @@ const userSchema = new Schema({
     password: String,
     email: String,
     createdAt: String,
-
+    profilePic:String,
     //dika mou
     isOwnerOrg:{
         type:Schema.Types.Mixed,

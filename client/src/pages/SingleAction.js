@@ -2,18 +2,18 @@ import React,{useContext,useState,useRef} from 'react';
 import gql from 'graphql-tag';
 import {useQuery,useMutation} from '@apollo/react-hooks';
 import { Button,Icon,Label,Image, Card, Grid,Form } from 'semantic-ui-react';
-import OrgLikeButton from '../components/orgcomponents/OrgLikeButton'
+import ActLikeButton from '../components/actcomponents/ActLikeButton'
 import moment from 'moment';
 import {AuthContext} from '../context/auth';
-import OrgDeleteButton from '../components/orgcomponents/OrgDeleteButton';
-import DeleteButton from '../components/DeleteButton';
+import DeleteAct from '../components/actcomponents/DeleteAct';
 import MyPopup from '../util/MyPopup';
+import ActDeleteButton from '../components/actcomponents/ActDeleteButton'
 
-function SingeOrgPost(props){
+function SingleAction(props){
 
     //edw bazei sto postId tin timi tou post pou yparxei stin grammi tou url
-    const postId = props.match.params.postId;
-
+    const actId = props.match.params.actId;
+    
     const{user} = useContext(AuthContext);
 
     const commentInputRef=useRef(null);
@@ -21,34 +21,35 @@ function SingeOrgPost(props){
     const [comment,setComment] = useState('');
 
     //epeidi theloume to field tou getPost dinoume sto data to alias getPost, to name getPost diladi
-    const {data:{getOrgPost}={}} = useQuery(FETCH_ORGPOST_QUERY,{
+    const {data:{getAction}={}} = useQuery(FETCH_ACTION_QUERY,{
         variables:{
-            postId
+            actId
         }
     })
-
-    const [submitComment] = useMutation(SUBMIT_ORGCOMMENT_MUTATION,{
+    console.log(getAction);
+    const [submitComment] = useMutation(SUBMIT_ACTCOMMENT_MUTATION,{
         update(){
             setComment('');
             commentInputRef.current.blur();
         },
         variables: {
-            postId,
+            actId,
             body: comment
         }
      });
 
-    function deletePostCallback(){
+    function deleteActionCallback(){
         props.history.push('/');
     }
+
     //let epeidi einai conditional
     let postMarkup;
-    if(!getOrgPost){
+    if(!getAction){
         //perimenoume na fortosei, mporoume na balooume kai kyklo pou gyrnaei
-        postMarkup = <p>Loading Organization Post.....</p>
+        postMarkup = <p>Loading Action.....</p>
     }else{
-        const {id,body,createdAt,username,orgname,comments,likes,likeCount,commentCount}=getOrgPost;
-
+        const { id ,actName ,actDescription, actLocationLat, actLocationLong,actType,actOwner ,commentCount ,likeCount ,likes ,comments}=getAction;
+        console.log(getAction);
         postMarkup=(
             <Grid>
                 <Grid.Row>
@@ -61,13 +62,13 @@ function SingeOrgPost(props){
                     <Grid.Column width={10}>
                         <Card fluid>
                             <Card.Content>
-                                <Card.Header>{orgname}</Card.Header>
-                                <Card.Meta>{moment(createdAt).fromNow()}</Card.Meta>
-                                <Card.Description>{body}</Card.Description>
+                                <Card.Header>{actName}</Card.Header>
+                                {/* <Card.Meta>{moment(createdAt).fromNow()}</Card.Meta> */}
+                                <Card.Description>{actDescription}</Card.Description>
                             </Card.Content> 
                             <hr/>
                             <Card.Content extra>
-                                <OrgLikeButton user={user} orgpost={{id,likeCount,likes}}/>
+                                <ActLikeButton user={user} action={{id,likeCount,likes}}/>
                                 <MyPopup content="Comment on post">
                                 <Button
                                     as="div"
@@ -82,12 +83,12 @@ function SingeOrgPost(props){
                                         </Label>
                                 </Button>
                                 </MyPopup>
-                                {user && user.username===username &&(
-                                    <OrgDeleteButton postId={id} callback={deletePostCallback}/>
+                                {user && user.username===actOwner.username &&(
+                                    <DeleteAct actId={id} callback={deleteActionCallback}/>
                                  )}
                             </Card.Content>
                         </Card>
-                        {user && (
+                         {user && (
                             <Card fluid>
                                 <Card.Content>
                                 <p>Post a comment</p>
@@ -117,14 +118,14 @@ function SingeOrgPost(props){
                             <Card fluid key={comment.id}>
                                 <Card.Content>
                                     {user && user.username === comment.username &&(
-                                        <OrgDeleteButton postId={id} commentId={comment.id}/>
+                                        <ActDeleteButton actId={id} commentId={comment.id}/>
                                     )}
                                     <Card.Header>{comment.username}</Card.Header>
                                     <Card.Meta>{moment(comment.createdAt).fromNow()}</Card.Meta>
                                     <Card.Description>{comment.body}</Card.Description>
                                 </Card.Content>
                             </Card>
-                        ))} 
+                        ))}  
                     </Grid.Column>
                 </Grid.Row>
             </Grid>
@@ -133,9 +134,9 @@ function SingeOrgPost(props){
     return postMarkup;
 }
 
-const SUBMIT_ORGCOMMENT_MUTATION =gql`
-    mutation($postId:ID!,$body:String!){
-        createOrgComment(postId:$postId, body:$body){
+const SUBMIT_ACTCOMMENT_MUTATION =gql`
+    mutation($actId:ID!,$body:String!){
+        createActComment(actId:$actId, body:$body){
             id
             comments{
                 id body createdAt username
@@ -145,14 +146,18 @@ const SUBMIT_ORGCOMMENT_MUTATION =gql`
     }
 `
 
-const FETCH_ORGPOST_QUERY = gql`
-    query($postId:ID!){
-        getOrgPost(postId: $postId){
-            id body createdAt username likeCount orgname
-            likes{
+const FETCH_ACTION_QUERY = gql`
+    query($actId:ID!){
+        getAction(actId: $actId){
+            id actName actDescription actLocationLat actLocationLong actType 
+            actOwner{
                 username
             }
             commentCount
+            likeCount
+            likes{
+                username
+            }
             comments{
                 id username createdAt body
             }
@@ -161,4 +166,4 @@ const FETCH_ORGPOST_QUERY = gql`
 `;
 
 
-export default SingeOrgPost
+export default SingleAction

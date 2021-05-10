@@ -35,6 +35,15 @@ module.exports = {
             }catch(err){
                 throw new Error(err);
             }
+        },
+        async getOrganizationsbyType(_,{orgType}){
+            try{
+                const organizations= await Organization.find(orgType);
+                console.log(organizations);
+                return organizations;
+            }catch(err){
+                throw new Error(err);
+            }
         }
     },
     Mutation:{

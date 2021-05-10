@@ -12,6 +12,13 @@ module.exports = gql`
         likeCount: Int!
         commentCount: Int!
      }
+     type File {
+        id:ID!
+        url:String!
+        filename: String!,
+        mimetype: String!,
+        path: String!,
+        }
      type OrgPost {
         id: ID!
         body: String!
@@ -44,6 +51,7 @@ module.exports = gql`
         #diko mou
         isOwnerOrg:Organization
         isOwnerAct:Action
+        profilePic:File
     }
     input RegisterInput{
         username: String!
@@ -61,6 +69,11 @@ module.exports = gql`
         getOrganization(orgId: ID!): Organization
         getOrganizationsbyName(orgName: String!): [Organization]
         getActions:[Action]
+        #prepei na tsekaristei an douleuoun
+        getAction(actId:ID!):Action
+        getActionbyType(actType:String!):[Action]
+        getOrganizationsbyType(orgType:String!):[Organization]
+        files: [File]
      }
     #dika mou
     type Organization{
@@ -90,6 +103,10 @@ module.exports = gql`
         actType:String!
         actOrg:Organization
         actOwner:User!
+        comments: [Comment]!
+        likes: [Like]!
+        likeCount: Int!
+        commentCount: Int!
         #sto type prepei na epilegei anamesa se 6 types klp
     }
     input ActionInput{
@@ -115,9 +132,15 @@ module.exports = gql`
         createOrgPost(body:String!):OrgPost!
         deleteOrgPost(postId:ID!):String!
         likeOrgPost(postId:ID!):OrgPost!
+        uploadFile(file: Upload!): File
         createOrgComment(postId:ID!,body:String!):OrgPost!
         deleteOrgComment(postId:ID!,commentId:ID!):OrgPost!
         deleteOrg(orgId:ID!):String!
+
+        deleteAct(actId:ID!):String!
+        likeAct(actId:ID!):Action!
+        createActComment(actId:ID!,body:String!):Action!
+        deleteActComment(actId:ID!,commentId:ID!):Action!
     }
     type Subscription{
         newPost:Post!

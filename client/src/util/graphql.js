@@ -64,3 +64,24 @@ export const FETCH_ORGPOSTS_QUERY = gql`
   }
   }
 `;
+
+export const FETCH_ACTIONS_QUERY = gql`
+  {
+    
+    getActions{
+      id actName actDescription actLocationLat actLocationLong actType 
+            actOwner{
+                username
+            }
+            commentCount
+            likeCount
+            likes{
+                username
+            }
+            comments{
+                id username createdAt body
+            }
+         }
+  }
+  
+`;
