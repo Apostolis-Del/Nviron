@@ -19,6 +19,16 @@ function generateToken(user){
 }
 //ta args edw einai apo ta typedefs(ta args pou exoume orisei sta mutations)
 module.exports = {
+    Query:{
+        async getUserAndPics(){
+            try{
+                const user= await User.find();
+                return users;
+            }catch(err){
+                throw new Error(err);
+            }
+        }
+    },
     Mutation: {
         async login(_,{username,password}){
             const {errors,valid}= validateLoginInput(username,password);
@@ -83,7 +93,8 @@ module.exports = {
                 password,
                 createdAt: new Date().toISOString(),
                 isOwnerOrg:{},
-                isOwnerAct:{}
+                isOwnerAct:{},
+                profilePic:''
             });
             //save to database
             const res = await newUser.save();
