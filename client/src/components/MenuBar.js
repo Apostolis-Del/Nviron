@@ -33,8 +33,8 @@ const MenuBar = user ?(
 
           <Menu.Menu position='right'>
           <Menu.Item 
+            icon="user"
             name={user.username}
-            active
             as={Link}
             to="/userprofile"
           />

@@ -16,6 +16,7 @@ function Login(props) {
         username:'',
         email:'',
         password:'',
+        profilePic:'',
         confirmPassword:''
     }
 
@@ -23,7 +24,8 @@ function Login(props) {
         username:'',
         email:'',
         password:'',
-        confirmPassword:''
+        confirmPassword:'',
+        profilePic:'',
     })
 
     const [loginUser,{loading}] = useMutation(LOGIN_USER,{
@@ -101,7 +103,7 @@ const LOGIN_USER=gql`
                     username:$username
                     password:$password
             ){
-                id email username createdAt token
+                id email username createdAt token profilePic
             }
         }
 `

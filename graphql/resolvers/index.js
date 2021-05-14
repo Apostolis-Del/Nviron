@@ -5,6 +5,7 @@ const organizationsResolvers = require('./organizations');
 const actionResolvers = require('./actions');
 const orgpostResolvers = require('./orgposts')
 const filesResolvers = require('./files')
+const updateResolvers = require('./updates')
 
 //kati gia na einai ola mazi ta resolvers apta alla files kai na ta kanei export sto geniko index.js
 module.exports = {
@@ -50,7 +51,8 @@ module.exports = {
         ...organizationsResolvers.Mutation,
         ...actionResolvers.Mutation,
         ...orgpostResolvers.Mutation,
-        ...filesResolvers.Mutation
+        ...filesResolvers.Mutation,
+        ...updateResolvers.Mutation
     },
     Subscription:{
         ...postsResolvers.Subscription,

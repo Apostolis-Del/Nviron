@@ -16,14 +16,16 @@ function Register(props) {
         username:'',
         email:'',
         password:'',
-        confirmPassword:''
+        confirmPassword:'',
+        profilePic:''
     }
 
     const{ onChange,onSubmit,values} =useForm(registerUser,{
         username:'',
         email:'',
         password:'',
-        confirmPassword:''
+        confirmPassword:'',
+        profilePic:''
     })
 
     const [addUser,{loading}] = useMutation(REGISTER_USER,{
@@ -121,7 +123,7 @@ const REGISTER_USER=gql`
                     confirmPassword:$confirmPassword
                 }
             ){
-                id email username createdAt token
+                id email username createdAt token profilePic
             }
         }
 `

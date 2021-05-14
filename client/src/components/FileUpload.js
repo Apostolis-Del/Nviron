@@ -5,9 +5,11 @@ import gql from "graphql-tag";
 
 
 // pass in the UploadMutation mutation we created earlier.
-function FileUpload(){
+function FileUpload({profilepic}){
 
-  const [uploadFile] = useMutation(UPLOAD_FILE,{
+  const mutation = profilepic ? UPLOAD_PROFILE_PIC : UPLOAD_FILE;
+
+  const [uploadFile] = useMutation(mutation,{
       onCompleted: data=>console.log(data)
   });
 
@@ -53,6 +55,17 @@ function FileUpload(){
 const UPLOAD_FILE = gql`
   mutation uploadFile($file: Upload!) {
     uploadFile(file: $file) {
+      url
+      mimetype
+      id
+      filename
+      path
+    }
+  }
+`;
+const UPLOAD_PROFILE_PIC = gql`
+  mutation uploadProfilePic($file: Upload!) {
+    uploadProfilePic(file: $file) {
       url
       mimetype
       id

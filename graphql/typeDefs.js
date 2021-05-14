@@ -14,7 +14,7 @@ module.exports = gql`
      }
      type File {
         id:ID!
-        url:String!
+        url:String
         filename: String!,
         mimetype: String!,
         path: String!,
@@ -51,7 +51,7 @@ module.exports = gql`
         #diko mou
         isOwnerOrg:Organization
         isOwnerAct:Action
-        profilePic:File
+        profilePic:String
     }
     input RegisterInput{
         username: String!
@@ -74,6 +74,7 @@ module.exports = gql`
         getActionbyType(actType:String!):[Action]
         getOrganizationsbyType(orgType:String!):[Organization]
         files: [File]
+        getUserAndPics:[User]
      }
     #dika mou
     type Organization{
@@ -116,6 +117,12 @@ module.exports = gql`
         actLocationLong:Float!
         actType:String!
     }
+    input UpdateInput{
+        username:String!
+        email:String!
+        password:String!
+        confirmPassword:String
+    }
     #telos dikwn mou
     #registeInput of type RegisterInput
     type Mutation{
@@ -141,6 +148,8 @@ module.exports = gql`
         likeAct(actId:ID!):Action!
         createActComment(actId:ID!,body:String!):Action!
         deleteActComment(actId:ID!,commentId:ID!):Action!
+        updateUser(updateInput:UpdateInput):User!
+        uploadProfilePic(file: Upload!): File
     }
     type Subscription{
         newPost:Post!

@@ -31,7 +31,7 @@ function App() {
       <Route exact path='/orgposts/:postId' component={SingleOrgPost}/>
       <Route exact path='/organizations/:orgId' component={SingleOrg}/>
       <Route exact path='/actions/:actId' component={SingleAction}/>
-      <Route exact path='/userprofile' component={UserProfile}/>
+      <Route exact path='/userprofile' component={UserProfile}/> 
       </Container>
     </Router>
     </AuthProvider>
