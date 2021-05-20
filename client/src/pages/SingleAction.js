@@ -20,6 +20,11 @@ function SingleAction(props){
 
     const [comment,setComment] = useState('');
 
+    // const users={
+    //     username:userpics.username,
+    //     profilepic:userpics.profilePic
+    // }
+    // console.log(users);
     //epeidi theloume to field tou getPost dinoume sto data to alias getPost, to name getPost diladi
     const {data:{getAction}={}} = useQuery(FETCH_ACTION_QUERY,{
         variables:{
@@ -164,6 +169,7 @@ const FETCH_ACTION_QUERY = gql`
         }
     }
 `;
+
 
 
 export default SingleAction

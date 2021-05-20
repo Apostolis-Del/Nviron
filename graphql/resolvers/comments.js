@@ -3,11 +3,12 @@ const OrgPost = require('../../models/OrgPost');
 const Action = require('../../models/Action');
 const {AuthenticationError , UserInputError} = require('apollo-server');
 const checkAuth= require('../../util/check-auth');
+const organizations = require('./organizations');
 
 module.exports={
     Mutation:{
         createComment: async (_,{postId,body,},context) => {
-            const {username} = checkAuth(context);
+            const {username,profilePic} = checkAuth(context);
             if(body.trim() ===''){
                 throw new UserInputError('Empty comment',{
                     errors:{
@@ -21,7 +22,8 @@ module.exports={
                 post.comments.unshift({
                     body,
                     username,
-                    createdAt:new Date().toISOString()
+                    createdAt:new Date().toISOString(),
+                    profilePic:profilePic
                 })
                 await post.save();
                 return post;
@@ -46,7 +48,7 @@ module.exports={
         }
         },
         createOrgComment: async (_,{postId,body,},context) => {
-            const {username} = checkAuth(context);
+            const {username,profilePic} = checkAuth(context);
             if(body.trim() ===''){
                 throw new UserInputError('Empty comment',{
                     errors:{
@@ -60,7 +62,8 @@ module.exports={
                 post.comments.unshift({
                     body,
                     username,
-                    createdAt:new Date().toISOString()
+                    createdAt:new Date().toISOString(),
+                    profilePic:profilePic
                 })
                 await post.save();
                 return post;
@@ -85,7 +88,7 @@ module.exports={
         }
 },
     createActComment: async (_,{actId,body,},context) => {
-        const {username} = checkAuth(context);
+        const {username,profilePic} = checkAuth(context);
 
         if(body.trim() ===''){
             throw new UserInputError('Empty comment',{
@@ -100,7 +103,8 @@ module.exports={
             act.comments.unshift({
                 body,
                 username,
-                createdAt:new Date().toISOString()
+                createdAt:new Date().toISOString(),
+                profilePic:profilePic
             })
             await act.save();
             return act;

@@ -58,7 +58,8 @@ module.exports = {
                     actLocationLat,
                     actLocationLong,
                     actType,
-                    actOwner:{...user}
+                    actOwner:{...user},
+                    profilePic:''
                 });
 
                 console.log(user.username);

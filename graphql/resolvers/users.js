@@ -10,7 +10,9 @@ function generateToken(user){
     return jwt.sign({
         id:user.id,
         email:user.email,
-        username:user.username
+        username:user.username,
+        profilePic:user.profilePic,
+        isOwnerOrg:user.isOwnerOrg
     },
     SECRET_KEY,
     {expiresIn:'1h'}
@@ -22,7 +24,7 @@ module.exports = {
     Query:{
         async getUserAndPics(){
             try{
-                const user= await User.find();
+                const users= await User.find();
                 return users;
             }catch(err){
                 throw new Error(err);
@@ -51,7 +53,9 @@ module.exports = {
             return {
                 ...user._doc,
                 id:user._id,
-                token
+                token,
+                profilePic:user.profilePic,
+                isOwnerOrg:user.isOwnerOrg
             };
         },
 

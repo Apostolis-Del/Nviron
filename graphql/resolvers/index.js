@@ -41,6 +41,7 @@ module.exports = {
         ...organizationsResolvers.Query,
         ...actionResolvers.Query,
         ...orgpostResolvers.Query,
+        ...usersResolvers.Query,
         ...filesResolvers.Query
 
     },

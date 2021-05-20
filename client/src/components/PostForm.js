@@ -73,6 +73,7 @@ const CREATE_POST_MUTATION = gql`
       body
       createdAt
       username
+      profilePic
       likes {
         id
         username
@@ -84,6 +85,7 @@ const CREATE_POST_MUTATION = gql`
         body
         username
         createdAt
+        profilePic
       }
       commentCount
     }

@@ -5,11 +5,13 @@ const orgpostSchema = new Schema({
     username: String,
     orgname:String,
     createdAt: String,
+    profilePic:String,
     comments: [
         {
             body:String,
             username:String,
-            createdAt:String
+            createdAt:String,
+            profilePic:String,
         }
     ],
     likes: [

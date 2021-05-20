@@ -11,6 +11,7 @@ module.exports = gql`
         likes: [Like]!
         likeCount: Int!
         commentCount: Int!
+        profilePic:String
      }
      type File {
         id:ID!
@@ -30,12 +31,14 @@ module.exports = gql`
         likes: [Like]!
         likeCount: Int!
         commentCount: Int!
+        profilePic:String
      }
     type Comment{
         id: ID!
         createdAt: String!
         username: String!
         body: String!
+        profilePic:String
     }
     type Like{
         id: ID!
@@ -87,6 +90,8 @@ module.exports = gql`
         orgLocationLong:Float!
         orgType:String!
         orgOwner:User!
+        profilePic:String
+        coverPic:String
     }
     input OrganizationInput{
         orgName:String!
@@ -108,6 +113,8 @@ module.exports = gql`
         likes: [Like]!
         likeCount: Int!
         commentCount: Int!
+        profilePic:String
+        coverPic:String
         #sto type prepei na epilegei anamesa se 6 types klp
     }
     input ActionInput{
@@ -122,6 +129,13 @@ module.exports = gql`
         email:String!
         password:String!
         confirmPassword:String
+    }
+    input UpdateOrgInput{
+        orgName:String!
+        orgDescription:String!
+        orgLocationLat:Float!
+        orgLocationLong:Float!
+        orgType:String!
     }
     #telos dikwn mou
     #registeInput of type RegisterInput
@@ -150,6 +164,10 @@ module.exports = gql`
         deleteActComment(actId:ID!,commentId:ID!):Action!
         updateUser(updateInput:UpdateInput):User!
         uploadProfilePic(file: Upload!): File
+
+        uploadOrgProfilePic(file:Upload!):File
+        uploadOrgCoverPic(file:Upload!):File
+        updateOrganization(updateOrgInput:UpdateOrgInput!):Organization!
     }
     type Subscription{
         newPost:Post!

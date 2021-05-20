@@ -7,7 +7,7 @@ import LikeButton from './LikeButton';
 import DeleteButton from './DeleteButton';
 import MyPopup from '../util/MyPopup';
 
-function PostCard({post:{body,createdAt,id,username,likeCount,commentCount,likes}}){
+function PostCard({post:{body,createdAt,id,username,likeCount,commentCount,likes,profilePic}}){
 
     //kanoume extract ton user
     const {user} = useContext(AuthContext);
@@ -18,14 +18,17 @@ function PostCard({post:{body,createdAt,id,username,likeCount,commentCount,likes
     function commentPost(){
         console.log("commented post")
     }
+    console.log(profilePic,"TO PROFILE PIC")
     return(
         <Card fluid>
             <Card.Content>
-                <Image
-                floated='right'
-                size='mini'
-                src='https://react.semantic-ui.com/images/avatar/large/jenny.jpg'
-                />
+                {profilePic?(
+                    <Image  size='mini' floated='right' src={profilePic} />
+                    ):(
+                        <Image floated='right'
+                        size='mini'
+                        src='https://react.semantic-ui.com/images/avatar/large/jenny.jpg' />
+                    )}
                 <Card.Header>{username}</Card.Header>
                 
                 <Card.Meta as={Link} to={`/posts/${id}`}>{moment(createdAt).fromNow(true)}</Card.Meta>

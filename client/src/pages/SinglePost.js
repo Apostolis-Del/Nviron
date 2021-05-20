@@ -47,16 +47,17 @@ function SinglePost(props){
         //perimenoume na fortosei, mporoume na balooume kai kyklo pou gyrnaei
         postMarkup = <p>Loading post.....</p>
     }else{
-        const {id,body,createdAt,username,comments,likes,likeCount,commentCount}=getPost;
+        const {id,body,createdAt,username,comments,likes,likeCount,commentCount,profilePic}=getPost;
         console.log(getPost);
         postMarkup=(
             <Grid>
                 <Grid.Row>
                     <Grid.Column width={2}>
-                        <Image
-                        src="https://react.semantic-ui.com/images/avatar/large/molly.png"
-                        size="small"
-                        float="right"/>
+                    {profilePic?(
+                    <Image src={profilePic} />
+                    ):(
+                        <Image src='https://react.semantic-ui.com/images/avatar/large/matthew.png' wrapped ui={false} />
+                    )}
                     </Grid.Column>
                     <Grid.Column width={10}>
                         <Card fluid>
@@ -116,6 +117,13 @@ function SinglePost(props){
                         {comments.map(comment=>(
                             <Card fluid key={comment.id}>
                                 <Card.Content>
+                                {comment.profilePic?(
+                                    <Image  size='mini' floated='right' src={profilePic} />
+                                    ):(
+                                        <Image floated='right'
+                                        size='mini'
+                                        src='https://react.semantic-ui.com/images/avatar/large/jenny.jpg' />
+                                    )}
                                     {user && user.username === comment.username &&(
                                         <DeleteButton postId={id} commentId={comment.id}/>
                                     )}
@@ -138,7 +146,7 @@ const SUBMIT_COMMENT_MUTATION =gql`
         createComment(postId:$postId, body:$body){
             id
             comments{
-                id body createdAt username
+                id body createdAt username profilePic
             }
             commentCount
         }
@@ -148,13 +156,13 @@ const SUBMIT_COMMENT_MUTATION =gql`
 const FETCH_POST_QUERY = gql`
     query($postId:ID!){
         getPost(postId: $postId){
-            id body createdAt username likeCount
+            id body createdAt username likeCount profilePic
             likes{
-                username
+                username 
             }
             commentCount
             comments{
-                id username createdAt body
+                id username createdAt body profilePic
             }
         }
     }

@@ -75,6 +75,7 @@ module.exports = {
                     orgLocationLong,
                     orgType,
                     orgOwner: {...user},
+                    profilePic:''
                 });
 
               
@@ -118,6 +119,12 @@ module.exports = {
             const org = await Organization.findById(orgId);
             if(user.username === org.orgOwner.username){
                 await org.delete();
+                User.findOneAndUpdate({isOwnerOrg: org}, {$set:{isOwnerOrg:''}}, {new: true}, (err, doc) => {
+                    if (err) {
+                        console.log("Something wrong when updating data!");
+                    }
+                
+                });
                 return 'Organization deleted successfully';
             }else {
                 throw new AuthenticationError('Action not allowed');

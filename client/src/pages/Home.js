@@ -14,6 +14,7 @@ import 'leaflet/dist/leaflet.css';
 import {Marker, Popup, TileLayer } from 'react-leaflet';
 import OrgPostCard from '../components/orgcomponents/OrgPostCard';
 import ActionCard from '../components/actcomponents/ActionCard';
+import CustomMap from '../components/CustomMap';
 import CardCarousel from "../components/carouselcomponents/CardCarousel";
 import ImageCarousel from "../components/carouselcomponents/ImageCarousel";
 import "pure-react-carousel/dist/react-carousel.es.css";
@@ -38,18 +39,6 @@ function Home() {
 
      console.log("ta org posts",orgposts);
 
-    const [markerPosition, setMarkerPosition] = useState({
-        lat: 49.8419,
-        lng: 24.0315
-      });
-      const { lat, lng } = markerPosition;
-    
-      function moveMarker() {
-        setMarkerPosition({
-          lat: lat + 0.0001,
-          lng: lng + 0.0001
-        });
-      }
 
     if(data){
         console.log(data);
@@ -79,12 +68,7 @@ function Home() {
             <Grid.Column>
             <Segment>
             <div>
-                <Map markerPosition={markerPosition} />
-                <div>
-                    Current markerPosition: lat: {lat}, lng: {lng}
-                </div>
-                <button onClick={moveMarker}>Move marker</button>
-            
+                    <CustomMap />
             </div>
             </Segment>
             </Grid.Column>
@@ -104,16 +88,9 @@ function Home() {
             </Grid>
         </Segment>
         ):(
-            <Segment>
-            <div>
-                <Map markerPosition={markerPosition} />
-                <div>
-                    Current markerPosition: lat: {lat}, lng: {lng}
-                </div>
-                <button onClick={moveMarker}>Move marker</button>
+           
+                 <CustomMap /> 
             
-            </div>
-            </Segment>
         )}
 
         </Container>

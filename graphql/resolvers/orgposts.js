@@ -71,7 +71,8 @@ Query :{
                 user: user.id,
                 username: user.username,
                 orgname:foundOrg.orgName,
-                createdAt: new Date().toISOString()
+                createdAt: new Date().toISOString(),
+                profilePic:''
             });
             const post= await newPost.save();
 

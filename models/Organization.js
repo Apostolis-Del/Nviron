@@ -7,7 +7,8 @@ const organizationSchema = new Schema({
     orgLocationLat: Number,
     orgLocationLong: Number,
     orgType: String,
-
+    profilePic:String,
+    coverPic:String,
     orgActions:{
         type: Schema.Types.ObjectId,
         ref:'actions'

@@ -3,6 +3,7 @@ const path =require('path')
 const fs =require('fs')
 const checkAuth= require('../../util/check-auth');
 const User = require('../../models/User')
+const Organization = require('../../models/Organization')
 // import our model
 const File = require('../../models/Files');
 
@@ -85,7 +86,75 @@ module.exports={
 
       const user= checkAuth(context);
 
-      User.findOneAndUpdate({username:user.username}, {$set:{profilePic:`http://localhost:5000/images/profileimages/${randomName}`}}, {new: true}, (err, doc) => {
+      await User.findOneAndUpdate({username:user.username}, {$set:{profilePic:`http://localhost:5000/images/profileimages/${randomName}`}}, {new: true}, (err, doc) => {
+        if (err) {
+            console.log("Something wrong when updating data with image user");
+        }
+    
+       });
+
+      return newpic2;
+          // url:`http://localhost:5000/images/${randomName}`,
+          // filename:filename ,
+          // mimetype: mimetype,
+          // path: pathName
+      
+    }, 
+    uploadOrgCoverPic: async (parent,{file},context)=>{
+      const {createReadStream,filename,mimetype,encoding}=await file;
+
+      const {ext,name}= path.parse(filename);
+      const randomName=generateRandomString(12)+ext;
+
+      const stream= createReadStream();
+      const pathName= path.join(__dirname,`../../public/images/orgcoverimages/${randomName}`);
+      await stream.pipe(fs.createWriteStream(pathName));
+
+      const newpic = new File({
+        url:`http://localhost:5000/images/orgcoverimages/${randomName}`,
+        filename:filename ,
+        mimetype: mimetype,
+        path: pathName
+      });
+      const newpic2= await newpic.save();
+
+      const user= checkAuth(context);
+
+      await Organization.findOneAndUpdate({"orgOwner.username":user.username}, {$set:{coverPic:`http://localhost:5000/images/orgcoverimages/${randomName}`}}, {new: true}, (err, doc) => {
+        if (err) {
+            console.log("Something wrong when updating data with image user");
+        }
+    
+       });
+
+      return newpic2;
+          // url:`http://localhost:5000/images/${randomName}`,
+          // filename:filename ,
+          // mimetype: mimetype,
+          // path: pathName
+      
+    },
+    uploadOrgProfilePic: async (parent,{file},context)=>{
+      const {createReadStream,filename,mimetype,encoding}=await file;
+
+      const {ext,name}= path.parse(filename);
+      const randomName=generateRandomString(12)+ext;
+
+      const stream= createReadStream();
+      const pathName= path.join(__dirname,`../../public/images/orgprofileimages/${randomName}`);
+      await stream.pipe(fs.createWriteStream(pathName));
+
+      const newpic = new File({
+        url:`http://localhost:5000/images/orgprofileimages/${randomName}`,
+        filename:filename ,
+        mimetype: mimetype,
+        path: pathName
+      });
+      const newpic2= await newpic.save();
+
+      const user= checkAuth(context);
+
+      await Organization.findOneAndUpdate({"orgOwner.username":user.username}, {$set:{profilePic:`http://localhost:5000/images/orgprofileimages/${randomName}`}}, {new: true}, (err, doc) => {
         if (err) {
             console.log("Something wrong when updating data with image user");
         }

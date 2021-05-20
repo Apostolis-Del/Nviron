@@ -7,12 +7,13 @@ const actionSchema = new Schema({
     actLocationLat:Number,
     actLocationLong:Number,
     actType:String,
-    
+    actprofilePic:String,
     comments: [
         {
             body:String,
             username:String,
-            createdAt:String
+            createdAt:String,
+            profilePic:String,
         }
     ],
     likes: [

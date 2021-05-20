@@ -57,21 +57,21 @@ module.exports = {
                  if(valid){
 
                        //update orgpost username
-                        OrgPost.updateMany({username:user.username}, {$set:{username:username}}, {new: true}, (err, doc) => {
+                        await OrgPost.updateMany({username:user.username}, {$set:{username:username}}, {new: true}, (err, doc) => {
                             if (err) {
                                 console.log("Something wrong when updating data! ORGPOST 1");
                             }
                         
                         });
                         //update orgpost likes
-                        OrgPost.updateMany({ "likes.username":user.username}, {$set:{"likes.$.username":username}}, {new: true}, (err, doc) => {
+                        await OrgPost.updateMany({ "likes.username":user.username}, {$set:{"likes.$.username":username}}, {new: true}, (err, doc) => {
                             if (err) {
                                 console.log("Something wrong when updating data! ORGPOST 2");
                             }
                         
                         });
                         //update orgpost comments
-                        OrgPost.updateMany({ "comments.username":user.username}, {$set:{"comments.$.username":username}}, {new: true}, (err, doc) => {
+                        await OrgPost.updateMany({ "comments.username":user.username}, {$set:{"comments.$.username":username}}, {new: true}, (err, doc) => {
                             if (err) {
                                 console.log("Something wrong when updating data! ORGPOST comments 2");
                             }
@@ -79,35 +79,35 @@ module.exports = {
                         });
 
                         //update post username
-                        Post.updateMany({username:user.username}, {$set:{username:username}}, {new: true}, (err, doc) => {
+                        await Post.updateMany({username:user.username}, {$set:{username:username}}, {new: true}, (err, doc) => {
                             if (err) {
                                 console.log("Something wrong when updating data! POST 1");
                             }
                         
                         });
                         //update post likes
-                        Post.updateMany({ "likes.username":user.username}, {$set:{"likes.$.username":username}}, {new: true}, (err, doc) => {
+                        await Post.updateMany({ "likes.username":user.username}, {$set:{"likes.$.username":username}}, {new: true}, (err, doc) => {
                             if (err) {
                                 console.log("Something wrong when updating data! POST 2");
                             }
                         
                         });
                         //update post comments
-                        Post.updateMany({ "comments.username":user.username}, {$set:{"comments.$.username":username}}, {new: true}, (err, doc) => {
+                        await Post.updateMany({ "comments.username":user.username}, {$set:{"comments.$.username":username}}, {new: true}, (err, doc) => {
                             if (err) {
                                 console.log("Something wrong when updating data! POST comments 2");
                             }
                         
                         });
                         //update action likes
-                        Action.updateMany({ "likes.username":user.username}, {$set:{"likes.$.username":username}}, {new: true}, (err, doc) => {
+                        await Action.updateMany({ "likes.username":user.username}, {$set:{"likes.$.username":username}}, {new: true}, (err, doc) => {
                             if (err) {
                                 console.log("Something wrong when updating data! action likes ");
                             }
                         
                         });
                         //update action comments
-                        Action.updateMany({ "comments.username":user.username}, {$set:{"comments.$.username":username}}, {new: true}, (err, doc) => {
+                        await Action.updateMany({ "comments.username":user.username}, {$set:{"comments.$.username":username}}, {new: true}, (err, doc) => {
                             if (err) {
                                 console.log("Something wrong when updating data! POST 2");
                             }
@@ -118,7 +118,7 @@ module.exports = {
                 password= await bcrypt.hash(password, 12);
 
                 //update user
-                const newUser = User.findOneAndUpdate({username:user.username}, {$set:{
+                const newUser =await User.findOneAndUpdate({username:user.username}, {$set:{
                     username:username,
                     email:email,
                     password:password,
@@ -136,7 +136,7 @@ module.exports = {
                 if(newUser){
 
                     //update action.actOwner.username
-                    Action.updateMany({ actOwner :user2}, {$set:{"actOwner":user2}}, {new: true}, (err, doc) => {
+                    await Action.updateMany({ actOwner :user2}, {$set:{"actOwner":user2}}, {new: true}, (err, doc) => {
                         if (err) {
                             console.log("Something wrong when updating data! actOwner");
                         }
@@ -145,7 +145,7 @@ module.exports = {
 
 
                     //update organization.orgOwner.username
-                    Organization.updateMany({ orgOwner :user2}, {$set:{"orgOwner":user2}}, {new: true}, (err, doc) => {
+                    await Organization.updateMany({ orgOwner :user2}, {$set:{"orgOwner":user2}}, {new: true}, (err, doc) => {
                         if (err) {
                             console.log("Something wrong when updating data! orgOwner");
                         }
@@ -158,6 +158,60 @@ module.exports = {
                     ...user2._doc,
                     id:user2._id,
                     token
+                };
+            },
+            async updateOrganization (_, { updateOrgInput:{orgName,orgDescription,orgLocationLat,orgLocationLong,orgType}},context) { 
+                
+                const user= checkAuth(context);
+
+                //validate to orgname
+                const orgnamesame=await Organization.findOne({orgName});
+                if(orgnamesame) {
+                    throw new UserInputError('Organization Name is taken',{
+                        errors:{
+                            email:' This Organization Name is taken'
+                        }
+                    });
+                }
+
+
+                    console.log(orgnamesame);
+
+                    const orgname2= user.isOwnerOrg.orgName
+                    console.log(orgname2)
+                    //update user
+                    Organization.findOneAndUpdate({orgName: orgname2}, {$set:{
+                        orgName:orgName,
+                        orgDescription:orgDescription,
+                        orgLocationLat:orgLocationLat,
+                        orgLocationLong:orgLocationLong,
+                        orgType:orgType,
+                        orgOwner:user}}, {new: true}, (err, doc) => {
+                        if (err) {
+                            console.log("Something wrong when updating data!");
+                        }
+                    
+                    });
+                  
+
+                  const org2 = await Organization.findOne({orgName});
+                
+               console.log(org2,"TO NEWORG2")
+               console.log(user.isOwnerOrg.orgName,"TO ISOWNERORG")
+                
+
+                    //update action.actOwner.username
+                     User.findOneAndUpdate({"isOwnerOrg.orgName" :user.isOwnerOrg.orgName}, {$set:{isOwnerOrg:org2}}, {new: true}, (err, doc) => {
+                        if (err) {
+                            console.log("Something wrong when updating data! actOwner");
+                        }
+                    
+                    });
+
+
+                 
+                return {
+                    org2
                 };
             }
         }

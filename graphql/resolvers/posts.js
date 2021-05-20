@@ -1,4 +1,6 @@
 const Post = require('../../models/Post');
+const User = require('../../models/User');
+
 const checkAuth= require('../../util/check-auth');
 const {AuthenticationError, UserInputError}= require('apollo-server');
 const { argsToArgsConfig } = require('graphql/type/definition');
@@ -36,11 +38,14 @@ Query :{
                 throw new Error('Post body must not be empty');
             }
             //twra mporei na kanei allow to action pou tou dinoume na kanei
+            // const user1= await User.findOne({use})
+           // console.log(user)
             const newPost= new Post({
                 body,
                 user: user.id,
                 username: user.username,
-                createdAt: new Date().toISOString()
+                createdAt: new Date().toISOString(),
+                profilePic:user.profilePic
             });
             const post= await newPost.save();
 
