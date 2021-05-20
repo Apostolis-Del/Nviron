@@ -14,7 +14,8 @@ import 'mapbox-gl/dist/mapbox-gl.css';
 import NaturePin from './pins/NaturePin';
 import EnergyPin from './pins/EnergyPin';
 import AgriculturePin from './pins/AgriculturePin';
-//import AnimalPin from './pins/AnimalPin';
+import AnimalPin from './pins/AnimalPin';
+import MarinePin from './pins/MarinePin';
 
 function CustomMap() {
 
@@ -129,78 +130,56 @@ function CustomMap() {
             >
                 
                {(act.actType === "Energy Conservation")&&(
-                // <>
                 
-                // <img src={Energy} className='marker'
-                // onClick={() => handleMarkerClick(act.id, act.actLocationLat, act.actLocationLong)}
-                // />
-                //   </>
                 <EnergyPin size={20}  
               onClick={() => handleMarkerClick(act.id, act.actLocationLat, act.actLocationLong)}
                   /> 
                
               )}
-
-              {(act.actType=== "Nature Conservation" )&&(
-
-                // <Icon name="tree"
-                // style={{
-                //   fontSize: 7 * viewport.zoom,
-                //   // color:
-                //   //   currentUsername === p.username ? "tomato" : "slateblue",
-                //   // cursor: "pointer",
-                // }}
-                // onClick={() => handleMarkerClick(act.id, act.actLocationLat, act.actLocationLong)}
-
-                // />
+               
+               {(act.actType === "Nature Conservation")&&(
+               
                 <NaturePin size={20}  
               onClick={() => handleMarkerClick(act.id, act.actLocationLat, act.actLocationLong)}
                   /> 
+               
               )}
+
+             
 
                  {(act.actType=== "Marine Conservation" )&&(
 
-                  // <Icon name="tree"
-                  // style={{
-                  //   fontSize: 7 * viewport.zoom,
-                  //   // color:
-                  //   //   currentUsername === p.username ? "tomato" : "slateblue",
-                  //   // cursor: "pointer",
-                  // }}
-                  // onClick={() => handleMarkerClick(act.id, act.actLocationLat, act.actLocationLong)}
-
-                  // />
+                
                   <MarinePin size={20}  
                   onClick={() => handleMarkerClick(act.id, act.actLocationLat, act.actLocationLong)}
                       /> 
                   )
                   } 
 
+                   {(act.actType=== "Agriculture" )&&(
 
+                                
+                  <AgriculturePin size={20}  
+                  onClick={() => handleMarkerClick(act.id, act.actLocationLat, act.actLocationLong)}
+                    /> 
+                  )}
 
-                 {/* <Icon name="tree" 
+                   {(act.actType === "Animal Conservation")&&(
+                                
+                                <AnimalPin size={20}  
+                              onClick={() => handleMarkerClick(act.id, act.actLocationLat, act.actLocationLong)}
+                                  /> 
+                                
+                    )}  
+
+            {/* <Icon name="tree" 
                 style={{
                   fontSize: 7 * viewport.zoom,
                   // color:
                   //   currentUsername === p.username ? "tomato" : "slateblue",
                   // cursor: "pointer",
                 }}
-                onClick={() => handleMarkerClick(act.id, act.actLocationLat, act.actLocationLong)}
-
-                /> 
-                */}
-                
-
-
-              {/* <div
-                    style={{ transform: `translate(${-size / 2}px,${-size}px)` }}
-                    onClick={() => handleMarkerClick(act.id, act.actLocationLat, act.actLocationLong)}
-                  >
-                    <img
-                      src={Energy}
-                    />
-                  </div> */}
-
+                /> */}
             </Marker>
             {act.id === currentPlaceId && (
               <Popup

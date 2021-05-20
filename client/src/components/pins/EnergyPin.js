@@ -25,8 +25,8 @@ const pinStyleEnergy = {
         style={{...pinStyleEnergy, transform: `translate(${-size / 2}px,${-size}px)`}}
         onClick={onClick}
       >
-        <Energy />
-        <path d={Energy}/>
+         <Energy /> 
+        <path d={Energy}/> 
       </svg>
     );
   }
