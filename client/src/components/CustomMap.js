@@ -23,7 +23,7 @@ function CustomMap() {
   const [newPlace, setNewPlace] = useState(null);
   const [title, setTitle] = useState(null);
   const [desc, setDesc] = useState(null);
-  const [star, setStar] = useState(null);
+  const [star, setStar] = useState("Marine Conservation");
 
   const [viewport, setViewport] = useState({
     latitude: 47.040182,
@@ -254,7 +254,7 @@ function CustomMap() {
                   //onChange={onChange}
                   //value={values.actType}
                   >
-                    <option value="Marine Conservation">Marine Conservation</option>
+                    <option selected value="Marine Conservation">Marine Conservation</option>
                     <option value="Nature Conservation">Nature Conservation</option>
                     <option value="Energy Conservation">Energy Conservation</option>
                     <option value="Animal Conservation">Animal Conservation</option>
