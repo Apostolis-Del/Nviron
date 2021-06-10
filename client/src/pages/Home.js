@@ -14,6 +14,7 @@ import 'leaflet/dist/leaflet.css';
 import {Marker, Popup, TileLayer } from 'react-leaflet';
 import OrgPostCard from '../components/orgcomponents/OrgPostCard';
 import ActionCard from '../components/actcomponents/ActionCard';
+import ActionTabs from '../components/ActionTabs';
 import CustomMap from '../components/CustomMap';
 import CardCarousel from "../components/carouselcomponents/CardCarousel";
 import ImageCarousel from "../components/carouselcomponents/ImageCarousel";
@@ -64,13 +65,14 @@ function Home() {
 
     {user?(
         <Segment attached="bottom" >
-            <Grid columns={2} relaxed='very'>
-            <Grid.Column>
+            {/* <Grid columns={2} relaxed='very'> */}
+           
             <Segment>
             <div>
                     <CustomMap />
             </div>
             </Segment>
+            {/* <Grid.Column>
             </Grid.Column>
             <Grid.Column  >
                 <div >
@@ -83,9 +85,9 @@ function Home() {
                     </Segment>
                     </Transition.Group>
                 </div>
-            </Grid.Column>
+            </Grid.Column> */}
 
-            </Grid>
+            {/* </Grid> */}
         </Segment>
         ):(
            
@@ -94,8 +96,15 @@ function Home() {
         )}
 
         </Container>
+        <Grid.Row className="page-title">
+            <h1>Browse Recent Actions Based on Type</h1>
 
-        <Grid columns={2} divided>
+        </Grid.Row>
+       
+        <ActionTabs /> 
+
+
+        <Grid columns={2} style={{marginTop:20}}divided>
         <Grid.Row className="page-title">
             <h1>Recent Posts</h1>
         </Grid.Row>
@@ -141,7 +150,7 @@ function Home() {
         </Segment>
 
         
-        <Grid.Row className="page-title">
+        {/* <Grid.Row className="page-title">
             <h1>Recent Actions</h1>
         </Grid.Row>
         
@@ -162,7 +171,7 @@ function Home() {
                 }
             </Transition.Group>
          )}
-        </Grid.Row>
+        </Grid.Row> */}
         </Container>
         <Grid.Row className="page-title">
             <h1>Recent Organizations</h1>

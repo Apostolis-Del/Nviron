@@ -16,6 +16,7 @@ import FileUpload from '../components/FileUpload';
 import Uploads from '../components/Uploads'
 import UpdateOrg from '../components/orgcomponents/UpdateOrg'
 import Map from '../components/Map'
+import SingleOrgMap from '../components/SingleOrgMap'
 import '../App.css';
 import CustomMap from '../components/CustomMap'
 
@@ -146,35 +147,14 @@ function SingleOrg(props){
                                   </Grid.Column>
                                   <Grid.Column>
                                   <Segment>
-
-                                        <div>
-                                        <Map markerPosition={markerPosition} />
-                                        <div>
-                                            Current markerPosition: lat: {lat}, lng: {lng}
-                                        </div>
-                                        <button onClick={moveMarker}>Move marker</button>
-                                        </div>
-                                        </Segment>
-                                        {/* <MapContainer center={position} zoom={13} scrollWheelZoom={false}>
-                                            <TileLayer
-                                            attribution='&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
-                                            url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-                                            />
-                                            <Marker position={position}>
-                                            <Popup>
-                                                A pretty CSS3 popup. <br /> Easily customizable.
-                                            </Popup>
-                                            </Marker>
-                                        </MapContainer> */}
+                                      {console.log(getOrganization)}
+                                        <SingleOrgMap org={getOrganization}/>
+                                       
+                                    </Segment>                                        
                                  </Grid.Column>
                        </Grid.Row>
                        </Grid>
-                       {/* <Segment>
-                           <h4> Add your file</h4> 
-                          <FileUpload />
-                            <Uploads />  
-                       </Segment> */}
-                       <CustomMap />
+                       
                 <Grid.Row>
                     <Segment>
                     <Grid.Column width={10}>
@@ -210,6 +190,7 @@ const FETCH_SINGLEORG_QUERY=gql`
             orgName
             orgDescription
             orgLocationLat
+            orgType
             orgLocationLong
             orgOwner{
                 id username
