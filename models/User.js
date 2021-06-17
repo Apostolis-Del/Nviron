@@ -7,11 +7,16 @@ const userSchema = new Schema({
     email: String,
     createdAt: String,
     profilePic:String,
+    
     //dika mou
-    isOwnerOrg:{
+    subscribed:[{
         type:Schema.Types.Mixed,
         ref:"organizations"
-    },
+    }],
+    isOwnerOrg:[{
+        type:Schema.Types.Mixed,
+        ref:"organizations"
+    }],
     isOwnerAct:{
         type:Schema.Types.Mixed,
         ref:"actions"

@@ -7,7 +7,7 @@ import OrgLikeButton from './OrgLikeButton';
 import OrgDeleteButton from './OrgDeleteButton';
 import MyPopup from '../../util/MyPopup';
 
-function OrgPostCard({orgpost:{body,orgname,createdAt,id,username,likeCount,commentCount,likes},orgName}){
+function SubscribedOrgs({orgpost:{body,orgname,createdAt,id,username,likeCount,commentCount,likes},orgName}){
 
      //kanoume extract ton user
      const {user} = useContext(AuthContext);
@@ -59,4 +59,33 @@ function OrgPostCard({orgpost:{body,orgname,createdAt,id,username,likeCount,comm
          </Card>
      );
  }
- export default OrgPostCard;
+
+ const FETCH_SUBSCRIBEDORGS_QUERY= gql`
+    query($username:String!){
+        getSubscribedOrgs(username:$username){
+            subscribed
+        }
+`
+
+const FETCH_ORGPOST_BYNAME= gql`
+    query($orgname:String!){
+        getOrgPostsByName(orgname:$orgname){
+            id
+            body
+            username
+                createdAt
+            orgname
+            likes {
+                username
+            }
+            commentCount
+            likeCount
+            comments {
+                id
+                username
+                createdAt
+                body
+            }
+        }
+`
+ export default SubscribedOrgs;

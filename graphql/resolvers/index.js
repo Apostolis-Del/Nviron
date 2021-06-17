@@ -57,6 +57,7 @@ module.exports = {
     },
     Subscription:{
         ...postsResolvers.Subscription,
-        ...orgpostResolvers.Subscription
+        ...orgpostResolvers.Subscription,
+        ...usersResolvers.Subscription
     }
 }

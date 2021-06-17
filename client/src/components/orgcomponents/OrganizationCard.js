@@ -2,24 +2,42 @@ import React,{useContext} from 'react';
 import {Card,Icon,Label,Image,Button,Popup} from 'semantic-ui-react';
 import moment from 'moment';
 import {Link} from 'react-router-dom';
+import gql from 'graphql-tag';
 import {AuthContext} from '../../context/auth';
 import LikeButton from '../LikeButton';
 import DeleteButton from '../DeleteButton';
 import MyPopup from '../../util/MyPopup';
 import DeleteOrg from './DeleteOrg';
+import { useQuery } from '@apollo/react-hooks';
+
+import SubscribeOrgButton from './SubscribeOrgButton';
 
 function OrganizationCard({org:{orgName,orgDescription,orgOwner,id}}){
 
-    //kanoume extract ton user
     const {user} = useContext(AuthContext);
 
-    function likePost(){
-        console.log("liked post")
-    }
-    function commentPost(){
-        console.log("commented post")
-    }
+    // const forskip=user?false:true
+    // //FOR SUBSORGS
+    // console.log(forskip)
+
+    // const { loading, data } = useQuery(FETCH_SUBSCRIBEDORGS_QUERY,{
+        
+    //     skip:forskip,
+    //     variables:{
+    //         username:user.username
+    //     }
+    // });
+    // //edw ginetai destructure ta posts (to ? legetai ternary)
+    // const {getSubscribedOrgs: suborgs } = data ? data : [];
+    // console.log(suborgs,"ta sub orgssto orgcard")
+
+
+   
     return(
+        <>
+         {/* {loading?(
+            <h1>Loading Organizations</h1>
+        ):(  */}
         <Card fluid>
             <Card.Content>
                 <Image
@@ -34,31 +52,34 @@ function OrganizationCard({org:{orgName,orgDescription,orgOwner,id}}){
                 </Card.Description>
             </Card.Content>
             <Card.Content extra>
-            {/* <LikeButton user ={user} post={{id,likes,likeCount}}/>
-                    {
-                        //bgazei ena thema me dom nesting edw
-                    }
-                <MyPopup content="Comment on Post">
-                    <Button labelPosition='right' as={Link} to={`/posts/${id}`}>
-                            <Button basic color='blue'>
-                                <Icon name='comments' />
-                                Comment
-                            </Button>
-                            <Label as='a' basic color='blue' pointing='left'>
-                                {commentCount}
-                            </Label>
-                        </Button>
-                </MyPopup> */}
                 <Button labelPosition='right' as={Link} to={`/organizations/${id}`}>
                             <Button basic color='green'>
                                 Go to {orgName}'s Page
                             </Button>
                 </Button>
-                {//edw tsekare ean o user einai o idioktitis tou post kai ean einai bazoume
-                 //to delete button
+                {user&&
+                <SubscribeOrgButton user={user} orgName={orgName} orgId={id} 
+                // subscribedorgs={suborgs}
+                />
+                    }
+                {
                  user && user.username === orgOwner.username && <DeleteOrg orgId={id}/>}
             </Card.Content>
         </Card>
+         {/* )
+        } */}
+        </> 
     );
+                
 }
+
+const FETCH_SUBSCRIBEDORGS_QUERY= gql`
+   query($username:String!){
+        getSubscribedOrgs(username:$username){
+            subscribed{
+                orgName id
+            }
+        }
+}
+`
 export default OrganizationCard;

@@ -4,7 +4,23 @@
     font-size:2rem;
     margin-top:10px;
 }
-
+.tab-title{
+  display:block !important;
+  text-align: center;
+  font-size:2rem;
+  position:static;
+  margin-top:10px;
+}
+/* .menu{
+  top: 0;
+  left: 0;
+  width: 100%;
+  min-height: 6vh;
+  box-sizing: border-box;
+  justify-content: space-between;
+  align-items: center;
+  transition: all .7s ease-in;
+} */
 .form-container{
     width:100%;
     margin:auto;
@@ -224,6 +240,7 @@
     overflow-y: scroll;  /* or auto */
   }
 
+  /*---------------PROFILE----------------------*/
   .profile{
     display: flex;
 }
@@ -264,7 +281,8 @@
 }
 
 .profileInfoName{
-    font-size: 24px;
+    margin-bottom:100px;
+    font-size: 36px;
 }
 
 .profileInfoDesc{
@@ -273,4 +291,148 @@
 
 .profileRightBottom{
     display: flex;
+}
+
+/* -----------------RIGHTBAR--------------------------------*/
+.rightbar {
+  flex: 3.5;
+}
+
+.rightbarWrapper {
+  padding: 20px 20px 0 0;
+}
+
+
+.rightbarAd {
+  width: 100%;
+  border-radius: 10px;
+  margin: 30px 0;
+}
+
+.rightbarTitle{
+    margin-bottom: 20px;
+}
+
+.rightbarFriendList {
+  padding: 0;
+  margin: 0;
+  list-style: none;
+}
+
+.rightbarTitle{
+  font-size: 18px;
+  font-weight: 500;
+  margin-bottom: 10px;
+}
+
+.rightbarInfo{
+  margin-bottom: 30px;
+}
+
+.rightbarInfoItem{
+  margin-bottom: 10px;
+}
+
+.rightbarInfoKey{
+  font-weight: 500;
+  margin-right: 15px;
+  color: #555;  
+  text-align: center;
+}
+
+.rightbarInfoKeyloc{
+  font-weight: 500;
+  margin-right: 15px;
+  color: #555;
+  text-align: center;
+}
+
+.rightbarInfoValue{
+  font-weight: 300;
+}
+
+.rightbarFollowings{
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+}
+
+.rightbarFollowing{
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 20px;
+  cursor: pointer;
+}
+
+.rightbarFollowingImg{
+  width: 100px;
+  height: 100px;
+  object-fit: cover;
+  border-radius: 5px;
+}
+/*--------------FEED----------------------*/
+.feed{
+    flex:5.5
+}
+
+.feedWrapper{
+    padding: 20px;
+}
+
+/*-----------------SIDEBAR--------------------------*/
+
+.sidebar {
+  flex: 3;
+  height: calc(100vh - 50px);
+  /* overflow-y: scroll; */
+  position: relative;
+  /* top: 50px; */
+}
+
+::-webkit-scrollbar {
+  width: 5px;
+}
+::-webkit-scrollbar-track {
+  background-color: #f1f1f1;
+}
+::-webkit-scrollbar-thumb {
+  background-color: rgb(179, 179, 179);
+}
+
+.sidebarWrapper {
+  padding: 20px;
+}
+
+.sidebarList {
+  padding: 0;
+  margin: 0;
+  list-style: none;
+}
+
+.sidebarListItem {
+  display: flex;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.sidebarIcon {
+  margin-right: 15px;
+}
+
+.sidebarButton {
+  width: 150px;
+  border: none;
+  padding: 10px;
+  border-radius: 5px;
+  font-weight: 500;
+}
+
+.sidebarHr {
+  margin: 10px 0;
+}
+
+.sidebarFriendList {
+  padding: 0;
+  margin: 0;
+  list-style: none;
 }

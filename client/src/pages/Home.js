@@ -38,9 +38,11 @@ function Home() {
     const{loadingActs,data: dataActs} =useQuery(FETCH_ACTIONS_QUERY);
     const{ getActions: acts} = dataActs? dataActs:[];
 
+    
+
      console.log("ta org posts",orgposts);
 
-
+    console.log(user,"O USERRRRRRRRRRRRRR");
     if(data){
         console.log(data);
     }
@@ -96,13 +98,14 @@ function Home() {
         )}
 
         </Container>
+
         <Grid.Row className="page-title">
-            <h1>Browse Recent Actions Based on Type</h1>
+            <h1 style={{marginTop:30,marginBottom:30}}>Browse Recent Actions and Organizations Based on Type</h1>
 
         </Grid.Row>
-       
-        <ActionTabs /> 
-
+       <Segment>
+        <ActionTabs/> 
+        </Segment>
 
         <Grid columns={2} style={{marginTop:20}}divided>
         <Grid.Row className="page-title">
@@ -173,7 +176,7 @@ function Home() {
          )}
         </Grid.Row> */}
         </Container>
-        <Grid.Row className="page-title">
+        {/* <Grid.Row className="page-title">
             <h1>Recent Organizations</h1>
         </Grid.Row>
         
@@ -194,7 +197,7 @@ function Home() {
                 }
             </Transition.Group>
          )}
-        </Grid.Row>
+        </Grid.Row> */}
 
         <Grid.Row className="page-title">
             <h1>Recent Organizations' Posts</h1>

@@ -6,24 +6,33 @@ import { Button, Confirm, Icon, Popup } from 'semantic-ui-react';
 import { FETCH_ORGPOSTS_QUERY } from '../../util/graphql';
 import MyPopup from '../../util/MyPopup';
 
-function OrgDeleteButton({ postId, commentId, callback }) {
+function OrgDeleteButton({ postId, commentId, callback ,orgName}) {
   const [confirmOpen, setConfirmOpen] = useState(false);
 
   const mutation = commentId ? DELETE_ORGCOMMENT_MUTATION : DELETE_ORGPOST_MUTATION;
-
-
+  
+  const orgName2=orgName;
+  console.log(orgName2)
   const [deletePostOrMutation] = useMutation(mutation, {
     //otan mpei sto update simainei oti to post exei diagraftei epityxws
     update(proxy) {
       setConfirmOpen(false);
       if (!commentId) {
         const data = proxy.readQuery({
-            query: FETCH_ORGPOSTS_QUERY,
+            query: FETCH_SINGLEORGPOST_QUERY,
+            variables:{
+              orgname:orgName2
+            }
           });
+          console.log(data,"ta data")
           proxy.writeQuery({
-            query: FETCH_ORGPOSTS_QUERY,
+            query: FETCH_SINGLEORGPOST_QUERY,
             data: {
-              getOrgPosts: data.getOrgPosts.filter(p => p.id !== commentId)
+              //getOrgPostsByName: data.getOrgPostsbyName.filter(p => p.id !== postId)
+              getOrgPostsByName: data.getOrgPostsByName.filter(p => p.id !== postId)
+            },
+            variables:{
+              orgname:orgName2
             }
           });
       }
@@ -76,4 +85,22 @@ const DELETE_ORGCOMMENT_MUTATION = gql`
   }
 `;
 
+const FETCH_SINGLEORGPOST_QUERY= gql`
+    query($orgname:String!){
+        getOrgPostsByName(orgname:$orgname){
+            id
+            body
+            username
+            createdAt
+            comments{
+                id username
+            }
+            likes{
+                username
+            }
+            likeCount
+            commentCount
+        }
+    }
+`;
 export default OrgDeleteButton;

@@ -45,7 +45,6 @@ L.Marker.prototype.options.icon = DefaultIcon;
 function SingleOrg(props){
 
     
-      
 
     const [markerPosition, setMarkerPosition] = useState({
         lat: 49.8419,
@@ -54,12 +53,7 @@ function SingleOrg(props){
       const { lat, lng } = markerPosition;
 
 
-      function moveMarker() {
-        setMarkerPosition({
-          lat: lat + 0.0001,
-          lng: lng + 0.0001
-        });
-      }
+     
 
 
       //CUSTOM CODE FOR LEAFLET ---------------------------------------------
@@ -109,73 +103,153 @@ function SingleOrg(props){
    }
    else{
        
-       const {id,orgDescription,orgName,orgOwner,orgLocationLat,orgLocationLong}= getOrganization;
+       const {id,orgDescription,orgName,orgOwner,orgLocationLat,orgType,orgLocationLong}= getOrganization;
 
        if(getOrgPostsByName.getOrgPostsByName){
        const {body,username,createdAt,likeCount,commentCount} = getOrgPostsByName.getOrgPostsByName;
        }
 
        postMarkup=(
-           <Grid>
+           <>
+           <div className="profile">
+             {/* <Sidebar /> */}   
 
-               <Container >
+             <div className="profileRight">
+               <div className="profileRightTop">
+                 <div className="profileCover">
+                   <img
+                     className="profileCoverImg"
+                     src="https://i.pinimg.com/originals/3b/8a/d2/3b8ad2c7b1be2caf24321c852103598a.jpg"
+                     alt=""
+                   />
+                   <img
+                     className="profileUserImg"
+                     src="https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_640.png"
+                     alt=""
+                   />
+                 </div>
+                 <div className="profileInfo">
+                     <h2 className="profileInfoName">{orgName}</h2>
+                     {/* <span className="profileInfoDesc">{orgDescription}</span> */}
+                 </div>
+               </div>
+              
+               <div className="profileRightBottom">
+                 {/* <Feed />
+                 <Rightbar profile/> */}
+                <Segment>
+                <div className="sidebar">
+                <div className="sidebarWrapper">
+                    <ul className="sidebarList">
+                    <li className="sidebarListItem">
+                        <Button color='facebook'>
+                            <Icon name='facebook' /> Facebook
+                        </Button>
+                    </li>
+                    <li className="sidebarListItem">
+                        <Button color='youtube'>
+                            <Icon name='youtube' /> YouTube
+                        </Button>
+                    </li>
+                    <li className="sidebarListItem">
+                        <Button color='twitter'>
+                                <Icon name='twitter' /> Twitter
+                        </Button>
+                    </li>
+                    <li className="sidebarListItem">
+                        <Button color='instagram'>
+                                <Icon name='instagram' /> Instagram
+                        </Button>
+                    </li>
+                    </ul>
+                    <hr className="sidebarHr" />
+                    <ul className="sidebarFriendList">
+                        Donations
+                    </ul>
+                </div>
+                </div>
+                </Segment>
 
-                    <Image className="img-organizationpage"
-                       src="https://i.pinimg.com/originals/3b/8a/d2/3b8ad2c7b1be2caf24321c852103598a.jpg"
-                       //size="small"
-                       float="center"/>
-                       <h1 style={{ position: "absolute",
-                                    top: "25%",
-                                    left: "20%",
-                                    right:"15%",
-                                    color:"white",
-                                    textAlign:"center",
-                                    textShadow: "2px 2px 4px #606060	"}}>Welcome to {orgName}'s Page.</h1>
-                        {user && orgOwner.username===user.username &&(
-                        <div style={{textAlign:"right",marginTop:"10px"}}>
-                       <UpdateOrg />
-                       </div>)}
-                        <Grid columns={2} relaxed='very'>
-                       <Grid.Row >
-                                   <Grid.Column>
-                                   <Segment>
-                                   <div>
-                                    <h3 style={{textAlign:"center"}}>Organization Description:</h3>
-                                    <h3>{orgDescription}</h3>
-                                    </div>
+
+                <div className="feed">
+                    <div className="feedWrapper">
+                        <Grid.Row>
+                            <Segment>
+                            <Grid.Column width={10}>
+
+                                    {user && orgOwner.username===user.username &&(
+                                                <Segment>
+                                                    <OrgPostForm orgId={id} orgName={orgName}/>
+                                                    </Segment>
+
+                                                )}
+                            <h2 style={{textAlign:"center"}}> Recent Organization's Posts</h2> 
+
+                                        {getOrgPostsByName.getOrgPostsByName &&getOrgPostsByName.getOrgPostsByName.map(orgpost=>(
+                                                <OrgPostCard orgpost={orgpost} orgName={orgName}/>
+                                            ))
+                                            }
+                                </Grid.Column>
+                            </Segment>
+                        </Grid.Row>
+                     </div>
+                 </div>
+                 <div className="rightbar">
+                     <div className="rightbarWrapper">
+                                {user && orgOwner.username===user.username &&(
+                                <div style={{textAlign:"center"}}>
+                                    <Segment>
+                                        <UpdateOrg />
                                     </Segment>
-                                  </Grid.Column>
-                                  <Grid.Column>
-                                  <Segment>
-                                      {console.log(getOrganization)}
-                                        <SingleOrgMap org={getOrganization}/>
-                                       
-                                    </Segment>                                        
-                                 </Grid.Column>
-                       </Grid.Row>
-                       </Grid>
-                       
-                <Grid.Row>
+
+                                 </div>)}
                     <Segment>
-                    <Grid.Column width={10}>
-                    <h3 style={{textAlign:"center"}}> Recent Organization's Posts</h3> 
+                    <h3 style={{textAlign:"center"}}> Organization's Information</h3> 
 
-                            
-                            {user && orgOwner.username===user.username &&(
-                                <Segment>
-                                    <OrgPostForm />
-                                    </Segment>
+                    {/* <h4 className="rightbarTitle">Organization's Information</h4> */}
+                        <div className="rightbarInfo">
+                        <hr className="sidebarHr" />
 
-                            )}
-                            {getOrgPostsByName.getOrgPostsByName &&getOrgPostsByName.getOrgPostsByName.map(orgpost=>(
-                                <OrgPostCard orgpost={orgpost} />
-                            ))
-                            }
-                    </Grid.Column>
-                    </Segment>
-                </Grid.Row>
-                </Container>
-           </Grid>
+                        <div className="rightbarInfoItem">
+
+                            <h4 className="rightbarInfoKey">Description:</h4>
+                            <span className="rightbarInfoValue">{orgDescription}</span>
+                        </div>
+                        <hr className="sidebarHr" />
+
+                        <div className="rightbarInfoItem">
+                            <h4 className="rightbarInfoKey">Type:</h4>
+                            <span className="rightbarInfoValue">{orgType}</span>
+                        </div>
+                        <hr className="sidebarHr" />
+
+                        <div className="rightbarInfoItem">
+                            <h4 className="rightbarInfoKeyloc">Location:</h4>
+                            <span className="rightbarInfoValue"> 
+                            <SingleOrgMap org={getOrganization}/>
+                                        </span>
+                        </div>
+                        
+                        </div>
+                        </Segment>
+                        <Segment>
+                        <h3 style={{textAlign:"center"}}> Organization's Actions</h3> 
+
+                        <div className="rightbarFollowing">
+                            <img
+                            src="assets/person/2.jpeg"
+                            alt=""
+                            className="rightbarFollowingImg"
+                            />
+                            <span className="rightbarFollowingName">John Carter</span>
+                        </div>
+                        </Segment>
+                        </div>
+                    </div>
+               </div>
+             </div>
+           </div>
+        </>
        )
    }
    return postMarkup;

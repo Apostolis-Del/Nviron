@@ -52,9 +52,10 @@ module.exports = gql`
         username: String!
         createdAt: String!
         #diko mou
-        isOwnerOrg:Organization
+        isOwnerOrg:[Organization]
         isOwnerAct:Action
         profilePic:String
+        subscribed:[Organization]!
     }
     input RegisterInput{
         username: String!
@@ -78,6 +79,7 @@ module.exports = gql`
         getOrganizationsbyType(orgType:String!):[Organization]
         files: [File]
         getUserAndPics:[User]
+        getSubscribedOrgs(username:String!): User
      }
     #dika mou
     type Organization{
@@ -85,7 +87,7 @@ module.exports = gql`
         orgName:String!
         orgDescription:String!
         orgActions:[Action]
-        orgPosts:Post
+        orgPosts:[OrgPost]
         orgLocationLat:Float!
         orgLocationLong:Float!
         orgType:String!
@@ -150,7 +152,7 @@ module.exports = gql`
         #dika mou apo katw
         createOrg(organizationInput:OrganizationInput):Organization!
         createAction(actionInput:ActionInput):Action!
-        createOrgPost(body:String!):OrgPost!
+        createOrgPost(body:String!,orgId:ID!):OrgPost!
         deleteOrgPost(postId:ID!):String!
         likeOrgPost(postId:ID!):OrgPost!
         uploadFile(file: Upload!): File
@@ -158,6 +160,8 @@ module.exports = gql`
         deleteOrgComment(postId:ID!,commentId:ID!):OrgPost!
         deleteOrg(orgId:ID!):String!
 
+        
+        subscribeOrg(orgId:ID!):User!
         deleteAct(actId:ID!):String!
         likeAct(actId:ID!):Action!
         createActComment(actId:ID!,body:String!):Action!
@@ -171,5 +175,6 @@ module.exports = gql`
     }
     type Subscription{
         newPost:Post!
+        newUserSub:User!
     }
 `;

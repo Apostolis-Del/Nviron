@@ -3,7 +3,9 @@ const jwt = require('jsonwebtoken');
 const { SECRET_KEY } = require('../../config');
 const {UserInputError} = require('apollo-server');
 const {validateRegisterInput,validateLoginInput}= require('../../util/validators');
+const checkAuth= require('../../util/check-auth');
 
+const Organization = require('../../models/Organization')
 const User = require('../../models/User');
 
 function generateToken(user){
@@ -12,7 +14,8 @@ function generateToken(user){
         email:user.email,
         username:user.username,
         profilePic:user.profilePic,
-        isOwnerOrg:user.isOwnerOrg
+        isOwnerOrg:user.isOwnerOrg,
+        //subscribed:user.subscribed
     },
     SECRET_KEY,
     {expiresIn:'1h'}
@@ -29,7 +32,13 @@ module.exports = {
             }catch(err){
                 throw new Error(err);
             }
-        }
+        },
+        async getSubscribedOrgs(_,username,context){
+             //const {username} = checkAuth(context);
+             const user1=await User.findOne(username);
+            console.log(user1)
+            return user1
+         }
     },
     Mutation: {
         async login(_,{username,password}){
@@ -55,7 +64,7 @@ module.exports = {
                 id:user._id,
                 token,
                 profilePic:user.profilePic,
-                isOwnerOrg:user.isOwnerOrg
+                isOwnerOrg:user.isOwnerOrg,
             };
         },
 
@@ -110,6 +119,37 @@ module.exports = {
                 id:res._id,
                 token
             };
+        },
+        async subscribeOrg(_,{orgId},context){
+            const {username} = checkAuth(context);
+            const user=await User.findOne({username});
+            const org = await Organization.findById(orgId);
+            const orgname2=org.orgName
+            if(org){
+                if(user.subscribed.find(subscribed =>subscribed.orgName ===org.orgName)){
+                    //post already likes, unlike it
+                    user.subscribed = user.subscribed.filter(subscribed=>subscribed.orgName  !== org.orgName);
+                }else {
+                    //Not liked ,like post
+                    user.subscribed.push({
+                        id:org.id,
+                        orgName:org.orgName,
+                        orgDescription:org.orgDescription,
+                        orgLocationLat:org.orgLocationLat,
+                        orgLocationLong:org.orgLocationLong,
+                        orgType:org.orgType,
+                        orgOwner:org.orgOwner,
+                        profilePic:org.profilePic
+                    })
+                }
+                await user.save();
+                return user;
+            }else throw new UserInputError('Organization or User not found')
+        }
+    },
+    Subscription: {
+        newUserSub: {
+            subscribe: (_, __, {pubsub} ) => pubsub.asyncIterator('NEW_USER')
         }
     }
 }

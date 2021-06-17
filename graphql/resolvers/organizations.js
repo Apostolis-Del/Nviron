@@ -100,7 +100,7 @@ module.exports = {
                     newUser: user2
                 });
 */
-                User.findOneAndUpdate({username:user.username}, {$set:{isOwnerOrg:newOrganization}}, {new: true}, (err, doc) => {
+                User.findOneAndUpdate({username:user.username}, {$push:{isOwnerOrg:newOrganization}}, {new: true}, (err, doc) => {
                     if (err) {
                         console.log("Something wrong when updating data!");
                     }

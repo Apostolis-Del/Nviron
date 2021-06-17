@@ -45,26 +45,26 @@ function SubscribeOrgButton( {user,orgName,orgId,subscribedorgs}) {
   const [SubscribeFunction] = useMutation(SUBSCRIBE_TO_ORG, {
     variables: { orgId: orgId },
     
-        update(proxy, result) {
-          const data = proxy.readQuery({
-            query: FETCH_SUBSCRIBEDORGS_QUERY,
-            variables:{
-              username:user.username            
-            }
-          });
-          //console.log(result);
-          //edw prosthetoume to post mas sto getPosts gia na emfanizetai realtime
-          proxy.writeQuery({
-            query: FETCH_SUBSCRIBEDORGS_QUERY,
-            data: {
-              ...subscribed,
-              [subscribed]: [...subscribed[orgName],orgName]
-            },
-            variables:{
-              username:user.username            
-            }
-        });   
-        }
+        // update(proxy, result) {
+        //   const data = proxy.readQuery({
+        //     query: FETCH_SUBSCRIBEDORGS_QUERY,
+        //     variables:{
+        //       username:user.username            
+        //     }
+        //   });
+        //   //console.log(result);
+        //   //edw prosthetoume to post mas sto getPosts gia na emfanizetai realtime
+        //   proxy.writeQuery({
+        //     query: FETCH_SUBSCRIBEDORGS_QUERY,
+        //     data: {
+        //       ...subscribed,
+        //       [subscribed]: [...subscribed[orgName],orgName]
+        //     },
+        //     variables:{
+        //       username:user.username            
+        //     }
+        // });   
+        // }
       
     
   });

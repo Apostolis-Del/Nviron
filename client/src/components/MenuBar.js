@@ -3,6 +3,7 @@ import { Menu,Image,Item } from 'semantic-ui-react';
 import {Link} from 'react-router-dom';
 import {AuthContext} from '../context/auth';
 import logo from '../img/logo.png'
+import '../App.css'
 
 function MenuBar() {
     
@@ -19,7 +20,7 @@ function MenuBar() {
 //ena or gia na epistrefoume diaforetika MenuBars
 const MenuBar = user ?(
 
-  <Menu pointing secondary size="massive" color="green">
+  <Menu pointing className="menu" secondary size="massive" color="green">
           
           <Item.Image style={{background:"no-repeat" ,
                     width:"120px",

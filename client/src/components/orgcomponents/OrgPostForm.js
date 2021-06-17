@@ -6,24 +6,33 @@ import { useMutation } from '@apollo/react-hooks';
 import { useForm } from '../../util/hooks';
 import { FETCH_ORGPOSTS_QUERY } from '../../util/graphql';
 
-function OrgPostForm() {
+function OrgPostForm({orgId,orgName}) {
   const { values, onChange, onSubmit } = useForm(createOrgPostCallback, {
-    body: ''
+    body: '',
+    orgId:''
   });
 
+  values.orgId=orgId;
+  const orgName2=orgName;
   const [createOrgPost, { error }] = useMutation(CREATE_ORGPOST_MUTATION, {
     variables: values,
     //update replaces proxy with result
     update(proxy, result) {
       const data = proxy.readQuery({
-        query: FETCH_ORGPOSTS_QUERY
+        query: FETCH_SINGLEORGPOST_QUERY,
+        variables:{
+          orgname:orgName2
+        }
       });
       console.log(result);
       //edw prosthetoume to post mas sto getPosts gia na emfanizetai realtime
       proxy.writeQuery({
-        query: FETCH_ORGPOSTS_QUERY,
+        query: FETCH_SINGLEORGPOST_QUERY,
         data: {
-            getOrgPosts: [result.data.createOrgPost.body, ...data.getOrgPosts]
+            getOrgPostsByName: [result.data.createOrgPost.body, ...data.getOrgPostsByName]
+        },
+        variables:{
+          orgname:orgName2
         }
     });   
        values.body = '';
@@ -37,7 +46,7 @@ function OrgPostForm() {
   return (
     <>
       <Form onSubmit={onSubmit}>
-        <h2>Create an organization post:</h2>
+        <h3>Create an organization post:</h3>
         <Form.Field>
           <Form.Input
             placeholder="Hi World!"
@@ -66,8 +75,8 @@ function OrgPostForm() {
 }
 
 const CREATE_ORGPOST_MUTATION = gql`
-  mutation createOrgPost($body: String!) {
-    createOrgPost(body: $body) {
+  mutation createOrgPost($body: String! $orgId: ID!) {
+    createOrgPost(body: $body,orgId:$orgId) {
       id
       body
       createdAt
@@ -89,5 +98,22 @@ const CREATE_ORGPOST_MUTATION = gql`
     }
   }
 `;
-
+const FETCH_SINGLEORGPOST_QUERY= gql`
+    query($orgname:String!){
+        getOrgPostsByName(orgname:$orgname){
+            id
+            body
+            username
+            createdAt
+            comments{
+                id username
+            }
+            likes{
+                username
+            }
+            likeCount
+            commentCount
+        }
+    }
+`
 export default OrgPostForm;

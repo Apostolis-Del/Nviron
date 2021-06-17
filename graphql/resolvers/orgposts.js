@@ -40,7 +40,7 @@ Query :{
     },
     //mesa sto context yparxei to request body
     Mutation: {
-        async createOrgPost(_,{body},context){
+        async createOrgPost(_,{body,orgId},context){
             //Checks the authorization and returns the user if correct
 
             const user= checkAuth(context);
@@ -51,14 +51,14 @@ Query :{
 
             // console.log(foundOrg.orgOwner.username);
             console.log(user.username)
-            const foundOrg = await Organization.findOne({'orgOwner.username':user.username},{ 'orgName':2}, (err, result) => {
-                console.log(result);
-            }).lean();
+            // const foundOrg = await Organization.findOne({'orgOwner.username':user.username},{ 'orgName':2}, (err, result) => {
+            //     console.log(result);
+            // }).lean();
 
-            console.log(foundOrg.orgName);
-        
-
-
+            // console.log(foundOrg.orgName);
+            const foundOrgCorrect= await Organization.findById(orgId);
+            console.log(orgId)
+            console.log("to correct",foundOrgCorrect.orgName);
             if(body.trim()===''){
                 throw new Error('Org Post body must not be empty');
             }
@@ -70,7 +70,7 @@ Query :{
                 body,
                 user: user.id,
                 username: user.username,
-                orgname:foundOrg.orgName,
+                orgname:foundOrgCorrect.orgName,
                 createdAt: new Date().toISOString(),
                 profilePic:''
             });
