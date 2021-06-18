@@ -16,6 +16,8 @@ import OrgPostCard from '../components/orgcomponents/OrgPostCard';
 import ActionCard from '../components/actcomponents/ActionCard';
 import ActionTabs from '../components/ActionTabs';
 import CustomMap from '../components/CustomMap';
+import SubscribedOrgs from '../components/orgcomponents/SubscribedOrgs'
+import SubscribedOrgsHelper from '../components/orgcomponents/SubscribedOrgsHelper'
 import CardCarousel from "../components/carouselcomponents/CardCarousel";
 import ImageCarousel from "../components/carouselcomponents/ImageCarousel";
 import "pure-react-carousel/dist/react-carousel.es.css";
@@ -23,24 +25,23 @@ import "pure-react-carousel/dist/react-carousel.es.css";
 function Home() {
 
     const {user}=useContext(AuthContext);
-    //ta kanoume fetch edw
+
+    //FOR POSTS
     const { loading, data } = useQuery(FETCH_POSTS_QUERY);
-    //edw ginetai destructure ta posts (to ? legetai ternary)
     const { getPosts: posts } = data ? data : [];
 
+    //FOR ORGANIZATIONS
     const{loadingOrgs,data: dataOrgs } =useQuery(FETCH_ORGANIZATIONS_QUERY);
     const{ getOrganizations: orgs} = dataOrgs? dataOrgs:[];
 
-
+    //FOR ORGPOSTS
     const{loadingOrgPosts,data: dataOrgPosts } =useQuery(FETCH_ORGPOSTS_QUERY);
     const{ getOrgPosts: orgposts} = dataOrgPosts? dataOrgPosts:[];
 
+    //FOR ACTIONS
     const{loadingActs,data: dataActs} =useQuery(FETCH_ACTIONS_QUERY);
     const{ getActions: acts} = dataActs? dataActs:[];
 
-    
-
-     console.log("ta org posts",orgposts);
 
     console.log(user,"O USERRRRRRRRRRRRRR");
     if(data){
@@ -74,22 +75,7 @@ function Home() {
                     <CustomMap />
             </div>
             </Segment>
-            {/* <Grid.Column>
-            </Grid.Column>
-            <Grid.Column  >
-                <div >
-                    <Transition.Group>
-                    <Segment className="page-title" >
-                    <h1>Create a new Action</h1>
-                    </Segment >
-                    <Segment >
-                    <ActForm />
-                    </Segment>
-                    </Transition.Group>
-                </div>
-            </Grid.Column> */}
-
-            {/* </Grid> */}
+           
         </Segment>
         ):(
            
@@ -135,6 +121,15 @@ function Home() {
          )}
         </Grid.Row>
         <Container>
+        
+        {user &&(
+            <>
+                <h1 className='page-title'>Subscribed Organizations' Posts</h1>
+                
+                <SubscribedOrgsHelper user={user}/>
+            </>
+        )
+        }
 
         <Segment padded>
         {//if user
@@ -153,51 +148,9 @@ function Home() {
         </Segment>
 
         
-        {/* <Grid.Row className="page-title">
-            <h1>Recent Actions</h1>
-        </Grid.Row>
         
-        <Grid.Row>
-        
-       
-          
-         {loadingOrgs?(
-             <h1>Loading Organizations...</h1>
-         ):(
-            <Transition.Group>
-                {
-                     acts && acts.map(act=>(
-                        <Grid.Column key={act.id} style={{marginBottom:20}}>
-                                <ActionCard act={act}/>
-                        </Grid.Column>
-                    ))
-                }
-            </Transition.Group>
-         )}
-        </Grid.Row> */}
         </Container>
-        {/* <Grid.Row className="page-title">
-            <h1>Recent Organizations</h1>
-        </Grid.Row>
         
-        <Grid.Row>
-        
-       
-          
-         {loadingOrgs?(
-             <h1>Loading Organizations...</h1>
-         ):(
-            <Transition.Group>
-                {
-                     orgs && orgs.map(org=>(
-                        <Grid.Column key={org.id} style={{marginBottom:20}}>
-                                <OrganizationCard org={org}/>
-                        </Grid.Column>
-                    ))
-                }
-            </Transition.Group>
-         )}
-        </Grid.Row> */}
 
         <Grid.Row className="page-title">
             <h1>Recent Organizations' Posts</h1>
@@ -227,5 +180,7 @@ function Home() {
     </>
     );
 }
+
+
 
 export default Home;
