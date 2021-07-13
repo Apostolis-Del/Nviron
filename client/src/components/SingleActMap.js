@@ -17,8 +17,8 @@ import AgriculturePin from './pins/AgriculturePin';
 import AnimalPin from './pins/AnimalPin';
 import MarinePin from './pins/MarinePin';
 
-function SingleOrgMap({org:{orgLocationLat,orgLocationLong,orgType}}) {
-   // console.log(orgLocationLat,orgLocationLong,orgType)
+function SingleActMap({act:{actLocationLat,actLocationLong,actType}}) {
+   // console.log(actLocationLat,actLocationLong,actType)
   const [currentPlaceId, setCurrentPlaceId] = useState(null);
   const [newPlace, setNewPlace] = useState(null);
   const [title, setTitle] = useState(null);
@@ -54,21 +54,21 @@ function SingleOrgMap({org:{orgLocationLat,orgLocationLong,orgType}}) {
       >
           <>
             <Marker
-              latitude={orgLocationLat}
-              longitude={orgLocationLong}
+              latitude={actLocationLat}
+              longitude={actLocationLong}
               //offsetLeft={-3.5 * viewport.zoom}
               //offsetTop={-7 * viewport.zoom}
               
             >
                 
-               {(orgType === "Energy Conservation")&&(
+               {(actType === "Energy Conservation")&&(
                 
                 <EnergyPin size={20}  
                 />
                
               )}
                
-               {(orgType === "Nature Conservation")&&(
+               {(actType === "Nature Conservation")&&(
                
                 <NaturePin size={20}  
                 />
@@ -77,7 +77,7 @@ function SingleOrgMap({org:{orgLocationLat,orgLocationLong,orgType}}) {
 
              
 
-                 {(orgType=== "Marine Conservation" )&&(
+                 {(actType=== "Marine Conservation" )&&(
 
                 
                   <MarinePin size={20}  
@@ -85,14 +85,14 @@ function SingleOrgMap({org:{orgLocationLat,orgLocationLong,orgType}}) {
                   )
                   } 
 
-                   {(orgType=== "Agriculture" )&&(
+                   {(actType=== "Agriculture" )&&(
 
                                 
                   <AgriculturePin size={20}  
                     />
                   )}
 
-                   {(orgType === "Animal Conservation")&&(
+                   {(actType === "Animal Conservation")&&(
                                 
                                 <AnimalPin size={20}  
                              />
@@ -113,4 +113,4 @@ function SingleOrgMap({org:{orgLocationLat,orgLocationLong,orgType}}) {
 
 
 
-export default SingleOrgMap;
+export default SingleActMap;

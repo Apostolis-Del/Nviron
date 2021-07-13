@@ -8,6 +8,11 @@ const actionSchema = new Schema({
     actLocationLong:Number,
     actType:String,
     actprofilePic:String,
+    attendedUsername: [
+        {
+            username:String,
+        }
+    ],
     comments: [
         {
             body:String,

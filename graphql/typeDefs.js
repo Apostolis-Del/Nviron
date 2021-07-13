@@ -45,6 +45,10 @@ module.exports = gql`
         createdAt: String!
         username: String!
     }
+    type Attend{
+        id: ID!
+        username: String!
+    }
     type User{
         id: ID!
         email: String!
@@ -80,6 +84,7 @@ module.exports = gql`
         files: [File]
         getUserAndPics:[User]
         getSubscribedOrgs(username:String!): User
+        getSubscribedOrgs2(username:String!):OrgPost
      }
     #dika mou
     type Organization{
@@ -117,6 +122,8 @@ module.exports = gql`
         commentCount: Int!
         profilePic:String
         coverPic:String
+        attendCount:Int
+        attendedUsername:[Attend]!
         #sto type prepei na epilegei anamesa se 6 types klp
     }
     input ActionInput{
@@ -168,10 +175,11 @@ module.exports = gql`
         deleteActComment(actId:ID!,commentId:ID!):Action!
         updateUser(updateInput:UpdateInput):User!
         uploadProfilePic(file: Upload!): File
-
         uploadOrgProfilePic(file:Upload!):File
         uploadOrgCoverPic(file:Upload!):File
         updateOrganization(updateOrgInput:UpdateOrgInput!):Organization!
+        attendToAct(actId:ID!):Action!
+
     }
     type Subscription{
         newPost:Post!

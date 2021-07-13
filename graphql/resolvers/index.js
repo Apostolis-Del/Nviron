@@ -18,6 +18,12 @@ module.exports = {
             return parent.comments.length;
         }
     },
+    Action:{
+        //auto einai ena modifier kai kathe fora pou kaloume kati(pou kaleitai mutation i subscription ) pernaei apo auto to modifier
+        attendCount(parent){
+            return parent.attendedUsername.length;
+        }
+    },
     OrgPost:{
         //auto einai ena modifier kai kathe fora pou kaloume kati(pou kaleitai mutation i subscription ) pernaei apo auto to modifier
         likeCount(parent){

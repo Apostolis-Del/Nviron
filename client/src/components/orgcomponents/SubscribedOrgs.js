@@ -39,7 +39,7 @@ function SubscribedOrgs({user,subscribed:{orgName}}){
          ):(
             <Transition.Group>
                 {
-                     orgposts.length>0 && orgposts.map(orgpost=>
+                     orgposts && orgposts.map(orgpost=>
                          
                         <Grid.Column style={{marginBottom:60}}>
 

@@ -114,6 +114,24 @@ module.exports = {
                     await act.save();
                     return act;
                 }else throw new UserInputError('Act post not found')
+            },
+            async attendToAct(_,{actId},context){
+                const {username} = checkAuth(context);
+                const act = await Action.findById(actId);
+                if(act){
+                    if(act.attendedUsername.find(attend =>attend.username ===username)){
+                        //post already attendedUsername, unattend it
+                        act.attendedUsername = act.attendedUsername.filter(attend=>attend.username !== username);
+                    }else {
+                        //Not attendd ,attend post
+                        console.log(username)
+                        act.attendedUsername.push({
+                            username:username
+                        })
+                    }
+                    await act.save();
+                    return act;
+                }else throw new UserInputError('Act attend not found')
             }
     },
     Subscription: {

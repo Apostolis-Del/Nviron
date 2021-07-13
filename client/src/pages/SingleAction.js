@@ -1,13 +1,15 @@
 import React,{useContext,useState,useRef} from 'react';
 import gql from 'graphql-tag';
 import {useQuery,useMutation} from '@apollo/react-hooks';
-import { Button,Icon,Label,Image, Card, Grid,Form } from 'semantic-ui-react';
-import ActLikeButton from '../components/actcomponents/ActLikeButton'
+import { Button,Icon,Label,Image, Segment,Card, Grid,Form } from 'semantic-ui-react';
+import ActLikeButton from '../components/actcomponents/ActLikeButton';
 import moment from 'moment';
 import {AuthContext} from '../context/auth';
 import DeleteAct from '../components/actcomponents/DeleteAct';
 import MyPopup from '../util/MyPopup';
-import ActDeleteButton from '../components/actcomponents/ActDeleteButton'
+import ActDeleteButton from '../components/actcomponents/ActDeleteButton';
+import SingleActMap from '../components/SingleActMap';
+import AttendAct from '../components/AttendAct';
 
 function SingleAction(props){
 
@@ -56,84 +58,164 @@ function SingleAction(props){
         const { id ,actName ,actDescription, actLocationLat, actLocationLong,actType,actOwner ,commentCount ,likeCount ,likes ,comments}=getAction;
         console.log(getAction);
         postMarkup=(
-            <Grid>
-                <Grid.Row>
-                    <Grid.Column width={2}>
-                        <Image
-                        src="https://react.semantic-ui.com/images/avatar/large/molly.png"
-                        size="small"
-                        float="right"/>
-                    </Grid.Column>
-                    <Grid.Column width={10}>
-                        <Card fluid>
-                            <Card.Content>
-                                <Card.Header>{actName}</Card.Header>
-                                {/* <Card.Meta>{moment(createdAt).fromNow()}</Card.Meta> */}
-                                <Card.Description>{actDescription}</Card.Description>
-                            </Card.Content> 
-                            <hr/>
-                            <Card.Content extra>
-                                <ActLikeButton user={user} action={{id,likeCount,likes}}/>
-                                <MyPopup content="Comment on post">
-                                <Button
-                                    as="div"
-                                    labelPosition="right"
-                                    onClick={()=>console.log("comment on post")}
-                                    >
-                                        <Button basic color="blue">
-                                            <Icon name="comments"/>
-                                        </Button>
-                                        <Label basic color="blue" pointing="left">
-                                            {commentCount}
-                                        </Label>
-                                </Button>
-                                </MyPopup>
-                                {user && user.username===actOwner.username &&(
-                                    <DeleteAct actId={id} callback={deleteActionCallback}/>
-                                 )}
-                            </Card.Content>
-                        </Card>
-                         {user && (
-                            <Card fluid>
-                                <Card.Content>
-                                <p>Post a comment</p>
-                                <Form>
-                                    <div className="ui action input fuild">
-                                        <input 
-                                            type="text"
-                                            placeholder="Comment.."
-                                            value={comment}
-                                            onChange={event =>setComment(event.target.value)}
-                                            ref={commentInputRef}
-                                        />
-                                        <button type="submit"
-                                            className="ui button teal"
-                                            //ean den yparxoun comments tote tha einai disabled
-                                            disabled={comment.trim()===''}
-                                            onClick={submitComment}
-                                            >
-                                                Submit
-                                        </button>
-                                    </div>
-                                </Form>
-                                </Card.Content>
-                            </Card>
-                        )}
-                        {comments.map(comment=>(
-                            <Card fluid key={comment.id}>
-                                <Card.Content>
-                                    {user && user.username === comment.username &&(
-                                        <ActDeleteButton actId={id} commentId={comment.id}/>
+
+            <div className="profile">
+                
+             <div className="profileRight">
+               <div className="profileRightTop">
+                 <div className="profileCover">
+                   <img
+                     className="profileCoverImg"
+                     src="https://i.pinimg.com/originals/3b/8a/d2/3b8ad2c7b1be2caf24321c852103598a.jpg"
+                     alt=""
+                   />
+                   <img
+                     className="profileUserImg"
+                     src="https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_640.png"
+                     alt=""
+                   />
+                 </div>
+                 <div className="profileInfo">
+                     <h2 className="profileInfoName">{actName}</h2>
+                     {/* <span className="profileInfoDesc">{orgDescription}</span> */}
+                 </div>
+               </div>
+               <div className="profileRightBottom">
+
+               <div className="sidebar">
+                <div className="sidebarWrapper">
+                <Segment>
+
+                    <h3 style={{textAlign:"center"}}> Attend to this Action:</h3> 
+                                 
+                        <AttendAct user={user} act={getAction} />
+                        </Segment>
+
+                </div>
+                </div>
+
+               <div className="feed">
+                    <div className="feedWrapper">
+                        
+                            <Grid.Row>
+                                
+                                <Grid.Column width={10}>
+                                    <Card fluid>
+                                        <Card.Content>
+                                            <Card.Header>{actName}</Card.Header>
+                                            {/* <Card.Meta>{moment(createdAt).fromNow()}</Card.Meta> */}
+                                            <Card.Description>{actDescription}</Card.Description>
+                                        </Card.Content> 
+                                        <hr/>
+                                        <Card.Content extra>
+                                            <ActLikeButton user={user} action={{id,likeCount,likes}}/>
+                                            <MyPopup content="Comment on post">
+                                            <Button
+                                                as="div"
+                                                labelPosition="right"
+                                                onClick={()=>console.log("comment on post")}
+                                                >
+                                                    <Button basic color="blue">
+                                                        <Icon name="comments"/>
+                                                    </Button>
+                                                    <Label basic color="blue" pointing="left">
+                                                        {commentCount}
+                                                    </Label>
+                                            </Button>
+                                            </MyPopup>
+                                            {user && user.username===actOwner.username &&(
+                                                <DeleteAct actId={id} callback={deleteActionCallback}/>
+                                            )}
+                                        </Card.Content>
+                                    </Card>
+                                    {user && (
+                                        <Card fluid>
+                                            <Card.Content>
+                                            <p>Post a comment</p>
+                                            <Form>
+                                                <div className="ui action input fuild">
+                                                    <input 
+                                                        type="text"
+                                                        placeholder="Comment.."
+                                                        value={comment}
+                                                        onChange={event =>setComment(event.target.value)}
+                                                        ref={commentInputRef}
+                                                    />
+                                                    <button type="submit"
+                                                        className="ui button teal"
+                                                        //ean den yparxoun comments tote tha einai disabled
+                                                        disabled={comment.trim()===''}
+                                                        onClick={submitComment}
+                                                        >
+                                                            Submit
+                                                    </button>
+                                                </div>
+                                            </Form>
+                                            </Card.Content>
+                                        </Card>
                                     )}
-                                    <Card.Header>{comment.username}</Card.Header>
-                                    <Card.Meta>{moment(comment.createdAt).fromNow()}</Card.Meta>
-                                    <Card.Description>{comment.body}</Card.Description>
-                                </Card.Content>
-                            </Card>
-                        ))}  
-                    </Grid.Column>
-                </Grid.Row>
-            </Grid>
+                                    {comments.map(comment=>(
+                                        <Card fluid key={comment.id}>
+                                            <Card.Content>
+                                                {user && user.username === comment.username &&(
+                                                    <ActDeleteButton actId={id} commentId={comment.id}/>
+                                                )}
+                                                <Card.Header>{comment.username}</Card.Header>
+                                                <Card.Meta>{moment(comment.createdAt).fromNow()}</Card.Meta>
+                                                <Card.Description>{comment.body}</Card.Description>
+                                            </Card.Content>
+                                        </Card>
+                                    ))}  
+                                </Grid.Column>
+                            </Grid.Row>
+                        
+                     </div>
+                </div>
+                <div className="rightbar">
+                     <div className="rightbarWrapper">
+                     {/* {user && orgOwner.username===user.username &&(
+                                <div style={{textAlign:"center"}}>
+                                    <Segment>
+                                        <UpdateOrg />
+                                    </Segment>
+
+                                 </div>)} */}
+                    <Segment>
+                    
+                    <h3 style={{textAlign:"center"}}> Action's Information</h3> 
+
+                        <div className="rightbarInfo">
+                        <hr className="sidebarHr" />
+
+                        <div className="rightbarInfoItem">
+
+                            <h4 className="rightbarInfoKey">Description:</h4>
+                            <span className="rightbarInfoValue">{actDescription}</span>
+                        </div>
+                        <hr className="sidebarHr" />
+
+                        <div className="rightbarInfoItem">
+                            <h4 className="rightbarInfoKey">Type:</h4>
+                            <span className="rightbarInfoValue">{actType}</span>
+                        </div>
+                        <hr className="sidebarHr" />
+
+                        <div className="rightbarInfoItem">
+                            <h4 className="rightbarInfoKeyloc">Location:</h4>
+                            <span className="rightbarInfoValue"> 
+                            <SingleActMap act={getAction}/>
+                                        </span>
+                        </div>
+                        
+                        </div>
+                        </Segment>
+                                          
+                    </div>
+                </div>
+            </div>
+            </div>
+            </div>
+
         )
     }
     return postMarkup;
@@ -163,9 +245,14 @@ const FETCH_ACTION_QUERY = gql`
             likes{
                 username
             }
+            
             comments{
                 id username createdAt body
             }
+            attendedUsername{
+                username
+            }
+             attendCount
         }
     }
 `;

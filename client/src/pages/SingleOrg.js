@@ -19,6 +19,8 @@ import Map from '../components/Map'
 import SingleOrgMap from '../components/SingleOrgMap'
 import '../App.css';
 import CustomMap from '../components/CustomMap'
+import spatula from '../img/logo.png';
+import StripeContainer from '../components/orgcomponents/StripeContainer';
 
 import L from 'leaflet';
 import icon from 'leaflet/dist/images/marker-icon.png';
@@ -44,7 +46,8 @@ L.Marker.prototype.options.icon = DefaultIcon;
 
 function SingleOrg(props){
 
-    
+    const [showItem, setShowItem] = useState(false)
+
 
     const [markerPosition, setMarkerPosition] = useState({
         lat: 49.8419,
@@ -122,6 +125,8 @@ function SingleOrg(props){
                      src="https://i.pinimg.com/originals/3b/8a/d2/3b8ad2c7b1be2caf24321c852103598a.jpg"
                      alt=""
                    />
+                  
+
                    <img
                      className="profileUserImg"
                      src="https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_640.png"
@@ -166,6 +171,8 @@ function SingleOrg(props){
                     <ul className="sidebarFriendList">
                         Donations
                     </ul>
+
+                    
                 </div>
                 </div>
                 </Segment>
@@ -193,6 +200,11 @@ function SingleOrg(props){
                             </Segment>
                         </Grid.Row>
                      </div>
+                     <div className="App">
+                    <h1>The Spatula Store</h1>
+                    {showItem ? <StripeContainer/> : <> <h3>$10.00</h3> <img src={spatula} alt="Spaluta" />
+                    <button onClick={() => setShowItem(true)}>Purchase Spatula</button></>}
+                    </div>
                  </div>
                  <div className="rightbar">
                      <div className="rightbarWrapper">

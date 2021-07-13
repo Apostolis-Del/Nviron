@@ -3,11 +3,15 @@ const mongoose = require('mongoose');
 const express=require('express');
 const { MONGODB } = require('./config.js');
 const { getOperationAST } = require('graphql');
+const cors = require("cors")
 
 const typeDefs = require('./graphql/typeDefs');
 const resolvers = require('./graphql/resolvers');
 
 const pubsub = new PubSub();
+
+require("dotenv").config()
+const stripe = require("stripe")(process.env.STRIPE_SECRET_TEST)
 
 const server = new ApolloServer({
     typeDefs,
@@ -20,7 +24,34 @@ const server = new ApolloServer({
 const app = express();
 server.applyMiddleware({ app, path: '/graphql' });
 app.use(express.static('public'));
+app.use(cors())
+app.use(express.json());
 
+app.post('/payment', cors(), async (req, res) => {
+	try {
+        console.log(req.body)
+        const { amount, id } = req.body
+
+		const payment = await stripe.paymentIntents.create({
+			amount,
+			currency: "USD",
+			description: "Spatula company",
+			payment_method: id,
+			confirm: true
+		})
+		console.log("Payment", payment)
+		res.json({
+			message: "Payment successful",
+			success: true
+		})
+	} catch (error) {
+		console.log("Error", error)
+		res.json({
+			message: "Payment failed",
+			success: false
+		})
+	}
+})
 // app.listen({port:5000},()=>{
 //     console.log('server running at port 5000')
 // })

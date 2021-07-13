@@ -5,7 +5,8 @@ const {UserInputError} = require('apollo-server');
 const {validateRegisterInput,validateLoginInput}= require('../../util/validators');
 const checkAuth= require('../../util/check-auth');
 
-const Organization = require('../../models/Organization')
+const OrgPost = require('../../models/OrgPost');
+const Organization = require('../../models/Organization');
 const User = require('../../models/User');
 
 function generateToken(user){
@@ -38,7 +39,29 @@ module.exports = {
              const user1=await User.findOne(username);
             console.log(user1)
             return user1
-         }
+         },
+         async getSubscribedOrgs2(_,username,context){
+            //const {username} = checkAuth(context);
+            const user1=await User.findOne(username).lean();
+            //console.log(user1)
+            const subscribedorgs=user1.subscribed;
+            //console.log(subscribedorgs)
+            const orgname1="enas allos organismos"
+             const post1=await OrgPost.find({orgname1}).sort({ createdAt: -1 });
+             console.log(post1,"to post1")
+            var posts;
+            const kati= subscribedorgs.forEach( function(subscribedorgs){
+                const orgname=subscribedorgs.orgName
+                console.log(orgname,"TO ORGNAME")
+                posts= OrgPost.find({orgname}).sort({ createdAt: -1 });
+                //console.log(posts)
+                }
+                )
+
+                //console.log(posts,"TA POSTSSSSSSS")
+           return posts
+           
+        }
     },
     Mutation: {
         async login(_,{username,password}){
