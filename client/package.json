@@ -29,6 +29,7 @@
     "mdb-react-ui-kit": "^1.0.0-beta5",
     "pure-react-carousel": "^1.27.6",
     "react": "^17.0.2",
+    "react-datetime-picker": "^3.3.0",
     "react-dom": "^17.0.2",
     "react-dropzone": "^11.3.2",
     "react-leaflet": "^3.1.0",
@@ -50,6 +51,7 @@
       "react-app/jest"
     ]
   },
+  "proxy": "http://localhost:5000/graphql",
   "browserslist": {
     "production": [
       ">0.2%",

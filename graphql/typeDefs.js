@@ -49,6 +49,11 @@ module.exports = gql`
         id: ID!
         username: String!
     }
+    type Donation{
+        id:ID!
+        username:String!
+        donateDate:String!
+    }
     type User{
         id: ID!
         email: String!
@@ -57,7 +62,7 @@ module.exports = gql`
         createdAt: String!
         #diko mou
         isOwnerOrg:[Organization]
-        isOwnerAct:Action
+        isOwnerAct:[Action]
         profilePic:String
         subscribed:[Organization]!
     }
@@ -83,8 +88,12 @@ module.exports = gql`
         getOrganizationsbyType(orgType:String!):[Organization]
         files: [File]
         getUserAndPics:[User]
+        getActionbyOwner(username:String!):[Action]
         getSubscribedOrgs(username:String!): User
         getSubscribedOrgs2(username:String!):OrgPost
+        getDonations(orgname:String!):[Donation]
+        getOrganizationsbyOwner(orgOwner:String!):[Organization]
+
      }
     #dika mou
     type Organization{
@@ -99,6 +108,11 @@ module.exports = gql`
         orgOwner:User!
         profilePic:String
         coverPic:String
+        donations:[Donation]
+        facebookLink:String
+        youtubeLink:String
+        instagramLink:String
+        twitterLink:String
     }
     input OrganizationInput{
         orgName:String!
@@ -124,6 +138,8 @@ module.exports = gql`
         coverPic:String
         attendCount:Int
         attendedUsername:[Attend]!
+        startDate:String!
+        endDate:String!
         #sto type prepei na epilegei anamesa se 6 types klp
     }
     input ActionInput{
@@ -132,6 +148,8 @@ module.exports = gql`
         actLocationLat:Float!
         actLocationLong:Float!
         actType:String!
+        startDate:String!
+        endDate:String!
     }
     input UpdateInput{
         username:String!
@@ -178,7 +196,12 @@ module.exports = gql`
         uploadOrgProfilePic(file:Upload!):File
         uploadOrgCoverPic(file:Upload!):File
         updateOrganization(updateOrgInput:UpdateOrgInput!):Organization!
+        createDonation(orgId:ID!):Organization
         attendToAct(actId:ID!):Action!
+        addFacebook(orgname:String!,facebooklink:String!):Organization
+        addYoutube(orgname:String!,youtubelink:String!):Organization
+        addTwitter(orgname:String!,twitterlink:String!):Organization
+        addInstagram(orgname:String!,instagramlink:String!):Organization
 
     }
     type Subscription{

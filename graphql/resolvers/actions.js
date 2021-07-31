@@ -35,10 +35,20 @@ module.exports = {
             }catch(err){
                 throw new Error(err);
             }
+        },
+        async getActionbyOwner(_,{username}){
+            try{
+                console.log(username)
+                const actions= await Action.find({"actOwner.username":  username});
+                console.log(actions);
+                return actions;
+            }catch(err){
+                throw new Error(err);
+            }
         }
     },
     Mutation:{
-            async createAction(_,{actionInput:{actName,actDescription,actLocationLat,actLocationLong,actType}},context){
+            async createAction(_,{actionInput:{actName,actDescription,actLocationLat,actLocationLong,actType,startDate,endDate}},context){
                 //Checks the authorization and returns the user if correct
                 const user= checkAuth(context);
                 
@@ -59,11 +69,13 @@ module.exports = {
                     actLocationLong,
                     actType,
                     actOwner:{...user},
-                    profilePic:''
+                    profilePic:'',
+                    startDate:new Date(startDate).toISOString(),
+                    endDate:new Date(endDate).toISOString()
                 });
 
                 console.log(user.username);
-                User.findOneAndUpdate({username:user.username}, {$set:{isOwnerAct:newAction}}, {new: true}, (err, doc) => {
+                User.findOneAndUpdate({username:user.username}, {$push:{isOwnerAct:newAction}}, {new: true}, (err, doc) => {
                     if (err) {
                         console.log("Something wrong when updating data!");
                     }

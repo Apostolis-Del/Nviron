@@ -55,7 +55,7 @@ function SingleAction(props){
         //perimenoume na fortosei, mporoume na balooume kai kyklo pou gyrnaei
         postMarkup = <p>Loading Action.....</p>
     }else{
-        const { id ,actName ,actDescription, actLocationLat, actLocationLong,actType,actOwner ,commentCount ,likeCount ,likes ,comments}=getAction;
+        const { id ,actName ,startDate,endDate,actDescription, actLocationLat, actLocationLong,actType,actOwner ,commentCount ,likeCount ,likes ,comments}=getAction;
         console.log(getAction);
         postMarkup=(
 
@@ -86,11 +86,17 @@ function SingleAction(props){
                 <div className="sidebarWrapper">
                 <Segment>
 
-                    <h3 style={{textAlign:"center"}}> Attend to this Action:</h3> 
+                    <h4 style={{textAlign:"center"}}> Attend to this Action:</h4> 
                                  
                         <AttendAct user={user} act={getAction} />
                         </Segment>
+                        <Segment>
+                            <h4>Start Date:</h4>
+                            <h4>{moment(startDate).format('LLLL')}</h4>
+                            <h4>Start Date:</h4>
+                            <h4>{moment(endDate).format('LLLL')}</h4>
 
+                        </Segment>
                 </div>
                 </div>
 
@@ -253,6 +259,8 @@ const FETCH_ACTION_QUERY = gql`
                 username
             }
              attendCount
+             startDate
+             endDate
         }
     }
 `;

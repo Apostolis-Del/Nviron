@@ -17,10 +17,10 @@ const userSchema = new Schema({
         type:Schema.Types.Mixed,
         ref:"organizations"
     }],
-    isOwnerAct:{
+    isOwnerAct:[{
         type:Schema.Types.Mixed,
         ref:"actions"
-    }
+    }]
 });
 
 module.exports = model('User',userSchema);

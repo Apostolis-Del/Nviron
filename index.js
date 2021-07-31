@@ -13,19 +13,27 @@ const pubsub = new PubSub();
 require("dotenv").config()
 const stripe = require("stripe")(process.env.STRIPE_SECRET_TEST)
 
+const app = express();
+
+app.use(cors())
+app.use(express.json());
+
 const server = new ApolloServer({
     typeDefs,
     resolvers,
     context:({req}) =>({req,pubsub})
 });
 
+
+// app.use((req, res, next) => {
+// 	res.header('Access-Control-Allow-Origin', '*');
+// 	next();
+//   });
 //auta einai kainourgia gia tis eikones
 
-const app = express();
 server.applyMiddleware({ app, path: '/graphql' });
 app.use(express.static('public'));
-app.use(cors())
-app.use(express.json());
+
 
 app.post('/payment', cors(), async (req, res) => {
 	try {
@@ -52,6 +60,84 @@ app.post('/payment', cors(), async (req, res) => {
 		})
 	}
 })
+
+
+////////NEWWWWWWWW
+
+app.post('/subscription', cors(), async (req, res) => {
+	console.log(req.body)
+
+	try{
+	const {email, payment_method} = req.body;
+	const customer = await stripe.customers.create({
+	  payment_method: payment_method,
+	  email: email,
+	  invoice_settings: {
+		default_payment_method: payment_method,
+	  },
+	});
+  
+	const subscription = await stripe.subscriptions.create({
+	  customer: customer.id,
+	  items: [{ plan: 'price_1JCjg4FJrBPtXE2sq5SDfowy' }],
+	  expand: ['latest_invoice.payment_intent']
+	});
+	
+	const status = subscription['latest_invoice']['payment_intent']['status'] 
+	const client_secret = subscription['latest_invoice']['payment_intent']['client_secret']
+  
+	res.json({
+		'client_secret': client_secret,
+	 	'status': status,
+		 message: "Payment successful",
+		});
+
+} catch (error) {
+	console.log("Error", error)
+	res.json({
+		message: "Payment failed",
+		success: false
+	})
+}
+  })
+
+  app.post('/subscriptiontwo', cors(), async (req, res) => {
+	console.log(req.body)
+
+	try{
+	const {email, payment_method} = req.body;
+	const customer = await stripe.customers.create({
+	  payment_method: payment_method,
+	  email: email,
+	  invoice_settings: {
+		default_payment_method: payment_method,
+	  },
+	});
+  
+	const subscription = await stripe.subscriptions.create({
+	  customer: customer.id,
+	  items: [{ plan: 'price_1JCjiuFJrBPtXE2st7kN5532' }],
+	  expand: ['latest_invoice.payment_intent']
+	});
+	
+	const status = subscription['latest_invoice']['payment_intent']['status'] 
+	const client_secret = subscription['latest_invoice']['payment_intent']['client_secret']
+  
+	res.json({
+		'client_secret': client_secret,
+	 	'status': status,
+		 message: "Payment successful",
+		});
+
+} catch (error) {
+	console.log("Error", error)
+	res.json({
+		message: "Payment failed",
+		success: false
+	})
+}
+  })
+
 // app.listen({port:5000},()=>{
 //     console.log('server running at port 5000')
 // })

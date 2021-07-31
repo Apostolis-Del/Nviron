@@ -37,7 +37,7 @@ module.exports = {
         async getSubscribedOrgs(_,username,context){
              //const {username} = checkAuth(context);
              const user1=await User.findOne(username);
-            console.log(user1)
+            //console.log(user1)
             return user1
          },
          async getSubscribedOrgs2(_,username,context){
@@ -48,7 +48,7 @@ module.exports = {
             //console.log(subscribedorgs)
             const orgname1="enas allos organismos"
              const post1=await OrgPost.find({orgname1}).sort({ createdAt: -1 });
-             console.log(post1,"to post1")
+             //console.log(post1,"to post1")
             var posts;
             const kati= subscribedorgs.forEach( function(subscribedorgs){
                 const orgname=subscribedorgs.orgName
@@ -128,8 +128,8 @@ module.exports = {
                 username,
                 password,
                 createdAt: new Date().toISOString(),
-                isOwnerOrg:{},
-                isOwnerAct:{},
+                isOwnerOrg:[],
+                isOwnerAct:[],
                 profilePic:''
             });
             //save to database

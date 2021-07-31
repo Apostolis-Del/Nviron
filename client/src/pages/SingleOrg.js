@@ -1,8 +1,10 @@
 import React,{useContext,useState,useRef,useEffect} from 'react';
 import gql from 'graphql-tag';
 import {useQuery,useMutation,useLazyQuery} from '@apollo/react-hooks';
-import { Button,Icon,Container,Segment,Header,Label,Image,Grid, Card,Form, GridColumn } from 'semantic-ui-react';
+import { Button,Icon,Container,Segment,Header,Label,Image,Grid, Modal, Card,Form, GridColumn } from 'semantic-ui-react';
 import OrgLikeButton from '../components/orgcomponents/OrgLikeButton'
+import { Link } from 'react-router-dom'
+import { ExternalLink } from 'react-external-link';
 import moment from 'moment';
 import {AuthContext} from '../context/auth';
 import  { TileLayer, Marker,MapContainer, Popup } from 'react-leaflet';
@@ -18,13 +20,17 @@ import UpdateOrg from '../components/orgcomponents/UpdateOrg'
 import Map from '../components/Map'
 import SingleOrgMap from '../components/SingleOrgMap'
 import '../App.css';
+import ActionCard from '../components/actcomponents/ActionCard'
 import CustomMap from '../components/CustomMap'
-import spatula from '../img/logo.png';
+import spatula from '../img/donate.png';
 import StripeContainer from '../components/orgcomponents/StripeContainer';
+import AddSocialInstaTwit from '../components/orgcomponents/AddSocialInstaTwit';
+import AddSocialFaceYou from '../components/orgcomponents/AddSocialFaceYou';
 
 import L from 'leaflet';
 import icon from 'leaflet/dist/images/marker-icon.png';
 import iconShadow from 'leaflet/dist/images/marker-shadow.png';
+//import addSocialMedia from '../components/orgcomponents/addSocialMediaFBYT';
 
 let DefaultIcon = L.icon({
     iconUrl: icon,
@@ -48,6 +54,7 @@ function SingleOrg(props){
 
     const [showItem, setShowItem] = useState(false)
 
+    const [open, setOpen] = React.useState(false)
 
     const [markerPosition, setMarkerPosition] = useState({
         lat: 49.8419,
@@ -55,8 +62,8 @@ function SingleOrg(props){
       });
       const { lat, lng } = markerPosition;
 
-
-     
+      
+    
 
 
       //CUSTOM CODE FOR LEAFLET ---------------------------------------------
@@ -96,22 +103,42 @@ function SingleOrg(props){
           }
     },[loading])
 
-   console.log(getOrgPostsByName);
-   
+    const {orgOwner:orgowner2}=getOrganization?getOrganization:[];
+
+    const [bookItem2,{data:getActionbyOwner}] = useLazyQuery(FETCH_ACTIONS_BYOWNER)
+    useEffect(()=>{
+        if(!loading){
+            //EDW MPOREI NA YPARXEI THEMA KAI NA THELEI [] STA TYPEDEFS
+           //bookItem2({variables:{orgname:"enas allos organismos"}});
+           bookItem2({variables:{
+               username:orgowner2.username}
+            });
+           console.log("mpike sto useeffect")
+        }
+        return () => {
+            console.log("This will be logged on unmount");
+          }
+    },[loading])
+
+    
+    const currentDate=new Date();
+
    //let epeidi einai conditional
    let postMarkup;
-   if(!getOrganization || !getOrgPostsByName){
+   if(!getOrganization || !getOrgPostsByName || !getActionbyOwner){
        //perimenoume na fortosei, mporoume na balooume kai kyklo pou gyrnaei
        postMarkup = <p>Loading Organization Page.....</p>
    }
    else{
        
-       const {id,orgDescription,orgName,orgOwner,orgLocationLat,orgType,orgLocationLong}= getOrganization;
+       const {id,orgDescription,orgName,orgOwner,instagramLink,youtubeLink,facebookLink,twitterLink,orgLocationLat,donations,orgType,orgLocationLong}= getOrganization;
 
        if(getOrgPostsByName.getOrgPostsByName){
        const {body,username,createdAt,likeCount,commentCount} = getOrgPostsByName.getOrgPostsByName;
        }
-
+       if(getActionbyOwner.getActionbyOwner){
+        const {actName,actDescription} = getActionbyOwner.getActionbyOwner;
+        }
        postMarkup=(
            <>
            <div className="profile">
@@ -142,40 +169,134 @@ function SingleOrg(props){
                <div className="profileRightBottom">
                  {/* <Feed />
                  <Rightbar profile/> */}
-                <Segment>
-                <div className="sidebar">
-                <div className="sidebarWrapper">
+                    
+                
                     <ul className="sidebarList">
+                    <Segment>
+                    <div className="sidebar">
+                <div className="sidebarWrapper">
                     <li className="sidebarListItem">
-                        <Button color='facebook'>
-                            <Icon name='facebook' /> Facebook
+                    {facebookLink?(
+
+                        <Button color='facebook' as={Link} to={facebookLink}>
+                            <Icon name='facebook' /> Facebook {facebookLink}
                         </Button>
-                    </li>
-                    <li className="sidebarListItem">
-                        <Button color='youtube'>
-                            <Icon name='youtube' /> YouTube
+                        ):(
+                            <Button color='facebook' >
+                            <Icon name='facebook' /> Empty
                         </Button>
-                    </li>
+                        )}
+                        {user.username===orgOwner.username&&(
+
+                        <AddSocialFaceYou facebook orgname={orgName} orgId={id}/>
+                        )}
+                        </li>
+                    
                     <li className="sidebarListItem">
-                        <Button color='twitter'>
-                                <Icon name='twitter' /> Twitter
+                    {youtubeLink?(
+                        <Button color='youtube' as={Link} to={{pathname:youtubeLink}} target="_blank">
+                            <Icon name='youtube' /> YouTube {youtubeLink}
                         </Button>
+                        ):(
+                            <Button color='youtube' >
+                            <Icon name='youtube' /> Empty
+                        </Button>
+                        )}
+                        {user.username===orgOwner.username&&(
+                        <AddSocialFaceYou youtube orgname={orgName} orgId={id}/>
+                        )}
+                         
                     </li>
+                   
                     <li className="sidebarListItem">
+                    {twitterLink?(
+
+                        <Button color='twitter' as={Link} to={twitterLink}>
+                                <Icon name='twitter' /> Twitter {twitterLink}
+
+                        </Button>
+                        ):(
+                            <Button color='twitter' >
+                            <Icon name='twitter' /> Empty
+                        </Button>
+                        )}
+                        {user.username===orgOwner.username&&(
+
+                        <AddSocialInstaTwit twitter orgname={orgName} orgId={id}/>
+                        )}
+                        </li>
+                                        
+                    
+                    <li className="sidebarListItem" as={Link} to={instagramLink}>
+                    {instagramLink?(
                         <Button color='instagram'>
-                                <Icon name='instagram' /> Instagram
+                                <Icon name='instagram' /> Instagram {instagramLink}
                         </Button>
+                         ):(
+                            <Button color='instagram' >
+                            <Icon name='instagram' /> Empty
+                        </Button>
+                        )}
+                        {user.username===orgOwner.username&&(
+
+                        <AddSocialInstaTwit instagram orgname={orgName} orgId={id}/>
+                        )}
+                        </li>
+                   
+                    </div>
+                </div>
+                    </Segment>
+                    <Segment>
+                    <li className="sidebarListItem">
+
+                        {user?(
+                            
+                        // <div className="customdiv">
+                            
+                        // <h4>Subscribe monthly to this organization.</h4>
+                        // {showItem ? 
+                        //     <StripeContainer email={user.email}/> 
+                        //     : 
+                        //     <>  
+                        //     <img className="donateimg"src={spatula} alt="Spaluta" />
+                        //     <Button className="donatebutton" onClick={() => setShowItem(true)}>Subscribe</Button>
+                        //     </>}
+                        // </div>
+                        <>
+
+                        <div className="customdiv">
+                        <h4 className="customdiv">Subscribe monthly to this organization.</h4>
+                        <img className="donateimg"src={spatula} alt="Spaluta" />
+                        {donations.find((don) => don.username === user.username)||(moment().isAfter(moment(donations.donateDate).add(30, 'days')))?(
+                            <h4>You have already Subscribed to this organization</h4>
+                        ):
+                        <Modal
+                        onClose={() => setOpen(false)}
+                        onOpen={() => setOpen(true)}
+                        open={open}
+                        trigger={<Button className="donatebutton">Subscribe</Button>}
+                    >
+                        <Modal.Header>Subscribe to this organization</Modal.Header>
+                        <Modal.Content >
+
+                        <StripeContainer email={user.email} orgId={id}/> 
+                        </Modal.Content>
+
+                        </Modal>
+                        
+                        }
+                        
+                        </div>
+                        </>
+                        ):(<h4>Only logged in users can donate.</h4>)}
                     </li>
-                    </ul>
-                    <hr className="sidebarHr" />
-                    <ul className="sidebarFriendList">
-                        Donations
+                    </Segment>
+
                     </ul>
 
+
                     
-                </div>
-                </div>
-                </Segment>
+                
 
 
                 <div className="feed">
@@ -200,11 +321,7 @@ function SingleOrg(props){
                             </Segment>
                         </Grid.Row>
                      </div>
-                     <div className="App">
-                    <h1>The Spatula Store</h1>
-                    {showItem ? <StripeContainer/> : <> <h3>$10.00</h3> <img src={spatula} alt="Spaluta" />
-                    <button onClick={() => setShowItem(true)}>Purchase Spatula</button></>}
-                    </div>
+                     
                  </div>
                  <div className="rightbar">
                      <div className="rightbarWrapper">
@@ -248,11 +365,10 @@ function SingleOrg(props){
                         <h3 style={{textAlign:"center"}}> Organization's Actions</h3> 
 
                         <div className="rightbarFollowing">
-                            <img
-                            src="assets/person/2.jpeg"
-                            alt=""
-                            className="rightbarFollowingImg"
-                            />
+                        {getActionbyOwner.getActionbyOwner &&getActionbyOwner.getActionbyOwner.map(act=>(
+                                                <ActionCard act={act} />
+                                            ))
+                                            }
                             <span className="rightbarFollowingName">John Carter</span>
                         </div>
                         </Segment>
@@ -281,7 +397,14 @@ const FETCH_SINGLEORG_QUERY=gql`
             orgOwner{
                 id username
             }
-            
+            donations{
+                username
+                donateDate
+            }
+            instagramLink
+            youtubeLink
+            twitterLink
+            facebookLink
         }
     }
 `;
@@ -305,4 +428,24 @@ const FETCH_SINGLEORGPOST_QUERY= gql`
     }
 `;
 
+const FETCH_ACTIONS_BYOWNER= gql`
+    query($username:String!){
+        getActionbyOwner(username:$username){
+            id
+            actName
+            actDescription
+            actLocationLat
+            actLocationLong
+            actType
+            likes{
+                username
+            }
+            likeCount
+            commentCount
+            actOwner{
+                username
+            }
+        }
+    }
+`;
 export default SingleOrg

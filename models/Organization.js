@@ -9,6 +9,10 @@ const organizationSchema = new Schema({
     orgType: String,
     profilePic:String,
     coverPic:String,
+    facebookLink:String,
+    youtubeLink:String,
+    instagramLink:String,
+    twitterLink:String,
     orgActions:{
         type: Schema.Types.ObjectId,
         ref:'actions'
@@ -26,7 +30,11 @@ const organizationSchema = new Schema({
     orgOwner:{
         type: Schema.Types.Mixed,
         ref:'users'
-    }
+    },
+    donations:[{
+        type: Schema.Types.Mixed,
+        ref:'donations'
+    }]
 });
 
 module.exports = model( 'Organization', organizationSchema);

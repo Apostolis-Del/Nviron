@@ -37,6 +37,10 @@ export const FETCH_ORGANIZATIONS_QUERY = gql`
       orgOwner{
       username id 
       }
+      donations{
+        username
+        donateDate
+      }
       
 
   }
@@ -83,7 +87,10 @@ export const FETCH_ACTIONS_QUERY = gql`
             comments{
                 id username createdAt body
             }
+            startDate
+            endDate
          }
   }
   
 `;
+

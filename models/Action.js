@@ -8,6 +8,8 @@ const actionSchema = new Schema({
     actLocationLong:Number,
     actType:String,
     actprofilePic:String,
+    startDate:String,
+    endDate:String,
     attendedUsername: [
         {
             username:String,
