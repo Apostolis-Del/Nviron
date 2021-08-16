@@ -94,13 +94,10 @@ module.exports={
        });
 
       return newpic2;
-          // url:`http://localhost:5000/images/${randomName}`,
-          // filename:filename ,
-          // mimetype: mimetype,
-          // path: pathName
+          
       
     }, 
-    uploadOrgCoverPic: async (parent,{file},context)=>{
+    uploadOrgCoverPic: async (parent,{file,orgname},context)=>{
       const {createReadStream,filename,mimetype,encoding}=await file;
 
       const {ext,name}= path.parse(filename);
@@ -109,7 +106,7 @@ module.exports={
       const stream= createReadStream();
       const pathName= path.join(__dirname,`../../public/images/orgcoverimages/${randomName}`);
       await stream.pipe(fs.createWriteStream(pathName));
-
+      console.log(orgname)
       const newpic = new File({
         url:`http://localhost:5000/images/orgcoverimages/${randomName}`,
         filename:filename ,
@@ -120,7 +117,7 @@ module.exports={
 
       const user= checkAuth(context);
 
-      await Organization.findOneAndUpdate({"orgOwner.username":user.username}, {$set:{coverPic:`http://localhost:5000/images/orgcoverimages/${randomName}`}}, {new: true}, (err, doc) => {
+      await Organization.findOneAndUpdate({orgName:orgname}, {$set:{coverPic:`http://localhost:5000/images/orgcoverimages/${randomName}`}}, {new: true}, (err, doc) => {
         if (err) {
             console.log("Something wrong when updating data with image user");
         }
@@ -134,7 +131,7 @@ module.exports={
           // path: pathName
       
     },
-    uploadOrgProfilePic: async (parent,{file},context)=>{
+    uploadOrgProfilePic: async (parent,{file,orgname},context)=>{
       const {createReadStream,filename,mimetype,encoding}=await file;
 
       const {ext,name}= path.parse(filename);
@@ -154,7 +151,7 @@ module.exports={
 
       const user= checkAuth(context);
 
-      await Organization.findOneAndUpdate({"orgOwner.username":user.username}, {$set:{profilePic:`http://localhost:5000/images/orgprofileimages/${randomName}`}}, {new: true}, (err, doc) => {
+      await Organization.findOneAndUpdate({orgName:orgname}, {$set:{profilePic:`http://localhost:5000/images/orgprofileimages/${randomName}`}}, {new: true}, (err, doc) => {
         if (err) {
             console.log("Something wrong when updating data with image user");
         }

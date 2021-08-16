@@ -42,16 +42,19 @@ module.exports.validateLoginInput= (username,password) =>{
 }
 module.exports.validateOrgInput=(orgName,orgDescription,orgLocationLat,orgLocationLong,orgType)=>{
     if(orgName.trim()===''){
-        errors.username = 'Organization Name must not be empty';
+        errors.orgName = 'Organization Name must not be empty';
     }
     if(orgDescription.trim()===''){
-        errors.username = 'Organization Description must not be empty';
+        errors.orgDescription = 'Organization Description must not be empty';
     }
-    if(orgLocationLat.trim()===''){
-        errors.username = 'Organization Latitude Location must not be empty';
+    if(orgLocationLat===''){
+        errors.orgLocationLat = 'Organization Latitude Location must not be empty';
     }
-    if(orgLocationLong.trim()===''){
-        errors.username = 'Organization Longitude Location must not be empty';
+    if(orgLocationLong===''){
+        errors.orgLocationLong = 'Organization Longitude Location must not be empty';
+    }
+    if(orgType.trim()===''){
+        errors.orgType = 'Organization Longitude Location must not be empty';
     }
 }
 
@@ -69,3 +72,36 @@ module.exports.validateActInput=(actName,actDescription,actLocationLat,actLocati
         errors.username = 'Action Longitude Location must not be empty';
     }
 }
+
+module.exports.validateOrganizationInput = (
+    orgname,
+    description,
+    orgType,
+    lat,
+    long
+) =>{
+    const errors={};
+    if(orgname.trim()===''){
+        errors.orgname = 'Organization Name must not be empty';
+    }
+    if(description.trim()===''){
+        errors.description = 'Description must not be empty';
+    }
+    
+    if(orgType === ''){
+        errors.orgType= 'Organization Type must not be empty'
+
+    }
+    if(lat === ''){
+        errors.lat= 'Latitude Type must not be empty'
+
+    }
+    if(long === ''){
+        errors.long= 'Longitude  must not be empty'
+
+    }
+    return{
+        errors,
+        valid:Object.keys(errors).length<1
+    }
+};

@@ -12,7 +12,7 @@ import { useQuery } from '@apollo/react-hooks';
 
 import SubscribeOrgButton from './SubscribeOrgButton';
 
-function OrganizationCard({org:{orgName,orgDescription,orgOwner,id}}){
+function OrganizationCard({org:{orgName,orgDescription,orgOwner,id,profilePic},username}){
 
     const {user} = useContext(AuthContext);
 
@@ -40,11 +40,20 @@ function OrganizationCard({org:{orgName,orgDescription,orgOwner,id}}){
         ):(  */}
         <Card fluid>
             <Card.Content>
-                <Image
+            {profilePic?(
+                    <Image floated='right'
+                    size='mini'src={profilePic} />
+                    ):(
+                        <Image floated='right'
+                        size='mini'
+                        src='https://img.flaticon.com/icons/png/512/188/188379.png?size=1200x630f&pad=10,10,10,10&ext=png&bg=FFFFFFFF' />
+                    )}
+                
+                {/* <Image
                 floated='right'
-                size='mini'
-                src='https://react.semantic-ui.com/images/avatar/large/jenny.jpg'
-                />
+                 size='mini'
+                 src='https://react.semantic-ui.com/images/avatar/large/jenny.jpg' /> */}
+
                 <Card.Header>{orgName}</Card.Header>
                 
                 <Card.Description>
@@ -54,7 +63,7 @@ function OrganizationCard({org:{orgName,orgDescription,orgOwner,id}}){
             <Card.Content extra>
                 <Button labelPosition='right' as={Link} to={`/organizations/${id}`}>
                             <Button basic color='green'>
-                                Go to {orgName}'s Page
+                                {orgName}'s Page
                             </Button>
                 </Button>
                 {user&&
@@ -63,7 +72,7 @@ function OrganizationCard({org:{orgName,orgDescription,orgOwner,id}}){
                 />
                     }
                 {
-                 user && user.username === orgOwner.username && <DeleteOrg orgId={id}/>}
+                 user && user.username === orgOwner.username && <DeleteOrg orgId={id} username={username}/>}
             </Card.Content>
         </Card>
          {/* )

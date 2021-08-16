@@ -26,7 +26,7 @@ const pinStyleEnergy = {
         onClick={onClick}
       >
          <Energy /> 
-        <path d={Energy}/> 
+        {/* <path d={Energy}/>  */}
       </svg>
     );
   }

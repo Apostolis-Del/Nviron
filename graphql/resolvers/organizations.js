@@ -3,6 +3,7 @@ const User = require('../../models/User');
 const Post = require('../../models/Post');
 const OrgPost = require('../../models/OrgPost');
 const checkAuth= require('../../util/check-auth');
+const {validateOrgInput}= require('../../util/validators');
 const {AuthenticationError, UserInputError}= require('apollo-server');
 const { argsToArgsConfig } = require('graphql/type/definition');
 
@@ -58,10 +59,16 @@ module.exports = {
     },
     Mutation:{
             async createOrg(_,{organizationInput:{orgName,orgDescription,orgLocationLat,orgLocationLong,orgType}},context){
-
+               
+                //const {errors,valid}= validateOrgInput(orgName,orgDescription,orgLocationLat,orgLocationLong,orgType);
+                
+                // if(!valid){
+                //     throw new UserInputError('Errors',{errors});
+                // }
                 const user= checkAuth(context);    
                 const orgnamesame=await Organization.findOne({orgName});
                 if(orgnamesame) {
+                    errors.general= 'Same Organization Name';
                     throw new UserInputError('Organization Name is taken',{
                         errors:{
                             email:' This Organization Name is taken'
@@ -77,6 +84,7 @@ module.exports = {
                     orgType,
                     orgOwner: {...user},
                     profilePic:'',
+                    coverPic:'',
                     donations:[],
                     facebookLink:'',
                     youtubeLink:'',

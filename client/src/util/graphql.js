@@ -41,6 +41,7 @@ export const FETCH_ORGANIZATIONS_QUERY = gql`
         username
         donateDate
       }
+      profilePic
       
 
   }

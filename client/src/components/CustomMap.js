@@ -22,7 +22,7 @@ import MarinePin from './pins/MarinePin';
 import { makeStyles } from '@material-ui/core/styles';
 import TextField from '@material-ui/core/TextField';
 
-function CustomMap() {
+function CustomMap({username}) {
 
   const [currentPlaceId, setCurrentPlaceId] = useState(null);
   const [newPlace, setNewPlace] = useState(null);
@@ -33,8 +33,8 @@ function CustomMap() {
   const [enddate, setEndDate] = useState(null);
 
   const [viewport, setViewport] = useState({
-    latitude: 47.040182,
-    longitude: 17.071727,
+    latitude: 37.983810,
+    longitude: 23.727539,
     zoom: 4,
   });
 
@@ -94,7 +94,25 @@ function CustomMap() {
               result.data.createAction.actType, result.data.createAction.startDate,
               result.data.createAction.endDate,   ...data.getActions]
            }
-    });   
+    })
+      const data2 = proxy.readQuery({
+        query: FETCH_ACTIONS_OWNER_QUERY,
+        variables: { username:username },
+      });
+      //console.log(data2,"TA DATA2")
+      //console.log(data,"to data")
+
+      proxy.writeQuery({
+        query: FETCH_ACTIONS_OWNER_QUERY,
+        variables: { username:username },
+        data: {
+          getActionbyOwner: [result.data.createAction.actDescription, result.data.createAction.actName,
+            result.data.createAction.actLocationLat, result.data.createAction.actLocationLong,
+            result.data.createAction.actType, result.data.createAction.startDate,
+            result.data.createAction.endDate,    ...data2.getActionbyOwner]
+          }
+    })
+    //console.log("ta data2 meta",data2)  
        //values.body = '';
     }
     
@@ -233,8 +251,8 @@ function CustomMap() {
             <Marker
               latitude={newPlace.lat}
               longitude={newPlace.long}
-              //offsetLeft={-3.5 * viewport.zoom}
-              //offsetTop={-7 * viewport.zoom}
+              offsetLeft={-3.5 * viewport.zoom}
+              offsetTop={-7 * viewport.zoom}
             >
               <Room
                 style={{
@@ -357,4 +375,25 @@ const CREATE_ACT_MUTATION = gql`
           }
         `;
 
+const FETCH_ACTIONS_OWNER_QUERY = gql`
+query($username:String!){
+ getActionbyOwner(username:$username){
+   id actName actDescription actLocationLat actLocationLong actType 
+         actOwner{
+             username
+         }
+         commentCount
+         likeCount
+         likes{
+             username
+         }
+         comments{
+             id username createdAt body
+         }
+         startDate
+         endDate
+      }
+}
+
+`;
 export default CustomMap;

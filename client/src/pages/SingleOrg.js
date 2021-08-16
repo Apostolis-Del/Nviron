@@ -131,7 +131,7 @@ function SingleOrg(props){
    }
    else{
        
-       const {id,orgDescription,orgName,orgOwner,instagramLink,youtubeLink,facebookLink,twitterLink,orgLocationLat,donations,orgType,orgLocationLong}= getOrganization;
+       const {id,orgDescription,profilePic,coverPic,orgName,orgOwner,instagramLink,youtubeLink,facebookLink,twitterLink,orgLocationLat,donations,orgType,orgLocationLong}= getOrganization;
 
        if(getOrgPostsByName.getOrgPostsByName){
        const {body,username,createdAt,likeCount,commentCount} = getOrgPostsByName.getOrgPostsByName;
@@ -147,18 +147,24 @@ function SingleOrg(props){
              <div className="profileRight">
                <div className="profileRightTop">
                  <div className="profileCover">
-                   <img
-                     className="profileCoverImg"
-                     src="https://i.pinimg.com/originals/3b/8a/d2/3b8ad2c7b1be2caf24321c852103598a.jpg"
-                     alt=""
-                   />
-                  
-
-                   <img
+                         
+                 {coverPic?(
+                    <Image className="profileCoverImg" src={coverPic} />
+                    ):(
+                        <Image className="profileCoverImg"
+                        src='https://newevolutiondesigns.com/images/freebies/spring-facebook-cover-5.jpg' size="small" circular/>
+                    )}
+                    {profilePic?(
+                    <Image className="profileUserImg" src={profilePic} />
+                    ):(
+                        <Image className="profileUserImg"
+                        src='https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_640.png' size="small" circular/>
+                    )}
+                   {/* <img
                      className="profileUserImg"
                      src="https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_640.png"
                      alt=""
-                   />
+                   /> */}
                  </div>
                  <div className="profileInfo">
                      <h2 className="profileInfoName">{orgName}</h2>
@@ -328,7 +334,7 @@ function SingleOrg(props){
                                 {user && orgOwner.username===user.username &&(
                                 <div style={{textAlign:"center"}}>
                                     <Segment>
-                                        <UpdateOrg />
+                                        <UpdateOrg orgname={orgName}/>
                                     </Segment>
 
                                  </div>)}
@@ -394,6 +400,8 @@ const FETCH_SINGLEORG_QUERY=gql`
             orgLocationLat
             orgType
             orgLocationLong
+            profilePic
+            coverPic
             orgOwner{
                 id username
             }

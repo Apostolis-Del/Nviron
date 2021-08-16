@@ -6,11 +6,11 @@ import { Button, Confirm, Icon, Popup } from 'semantic-ui-react';
 import { FETCH_ORGANIZATIONS_QUERY } from '../../util/graphql';
 import MyPopup from '../../util/MyPopup';
 
-function OrgDeleteButton({ orgId, callback }) {
+function OrgDeleteButton({ orgId, callback ,username}) {
   const [confirmOpen, setConfirmOpen] = useState(false);
 
   const mutation = DELETE_ORG_MUTATION;
-
+  console.log(username,"username sto delete org")
   const [deleteOrg] = useMutation(mutation, {
     //otan mpei sto update simainei oti to post exei diagraftei epityxws
     update(proxy) {
@@ -25,6 +25,21 @@ function OrgDeleteButton({ orgId, callback }) {
               getOrganizations: data.getOrganizations.filter(p => p.id !== orgId)
             }
           });
+
+          const data2 = proxy.readQuery({
+            query: FETCH_ORGANIZATIONS_OWNER_QUERY,
+            variables: { orgOwner:username },
+          });
+          console.log(data2,"TA DATA2")
+          //console.log(data,"to data")
+    
+          proxy.writeQuery({
+            query: FETCH_ORGANIZATIONS_OWNER_QUERY,
+            variables: { orgOwner:username },
+            data: {
+              getOrganizationsbyOwner: data2.getOrganizationsbyOwner.filter(p => p.id !== orgId)
+            }
+        })
       }
       if (callback) callback();
     },
@@ -58,6 +73,25 @@ const DELETE_ORG_MUTATION = gql`
     deleteOrg(orgId: $orgId)
   }
 `;
-
+const FETCH_ORGANIZATIONS_OWNER_QUERY = gql`
+query($orgOwner:String!){  
+getOrganizationsbyOwner(orgOwner:$orgOwner){
+    id
+        orgName
+        orgDescription
+  orgLocationLat
+  orgLocationLong
+  orgType
+  orgOwner{
+  username id 
+  }
+  donations{
+    username
+    donateDate
+  }
+  profilePic
+}
+}
+`;
 
 export default OrgDeleteButton;

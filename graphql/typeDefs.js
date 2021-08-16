@@ -193,8 +193,8 @@ module.exports = gql`
         deleteActComment(actId:ID!,commentId:ID!):Action!
         updateUser(updateInput:UpdateInput):User!
         uploadProfilePic(file: Upload!): File
-        uploadOrgProfilePic(file:Upload!):File
-        uploadOrgCoverPic(file:Upload!):File
+        uploadOrgProfilePic(file:Upload!,orgname:String!):File
+        uploadOrgCoverPic(file:Upload!,orgname:String!):File
         updateOrganization(updateOrgInput:UpdateOrgInput!):Organization!
         createDonation(orgId:ID!):Organization
         attendToAct(actId:ID!):Action!

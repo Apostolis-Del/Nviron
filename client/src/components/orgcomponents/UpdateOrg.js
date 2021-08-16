@@ -2,11 +2,12 @@ import React from 'react';
 import FileUpload from '../FileUpload';
 import { Button, Header,Segment,Container,Divider, Image, Modal,Grid,GridColumn,GridRow } from 'semantic-ui-react';
 import UpdateOrgForm from './UpdateOrgForm';
+import OrgPicUpload from './OrgPicUpload';
 
-function UpdateOrg() {
+function UpdateOrg({orgname}) {
     
   const [open, setOpen] = React.useState(false)
-
+  console.log(orgname)
   return (
     <Modal
       onClose={() => setOpen(false)}
@@ -25,9 +26,14 @@ function UpdateOrg() {
               <GridColumn style={{width:400,left:25}}>  
                 <Segment>
 
-                <h4 style={{marginBottom:15}}>Update Your Organization's Profile Picture</h4>
-                <Image style={{marginBottom:30}} size='small' src='https://react.semantic-ui.com/images/avatar/large/rachel.png' wrapped />
-                <FileUpload profilepic="1" />
+                <h4 style={{marginBottom:15}}>Update Your Organization's Profile Picture:</h4>
+                <Image style={{marginBottom:30}} size='tiny' src='https://react.semantic-ui.com/images/avatar/large/rachel.png' wrapped />
+                <OrgPicUpload profilepic="1" orgname={orgname}/>
+                <h4 style={{marginBottom:15}}>Update Your Organization's Cover Picture:</h4>
+                <Image style={{marginBottom:30}} size='tiny' src='https://react.semantic-ui.com/images/avatar/large/rachel.png' wrapped />
+
+                <OrgPicUpload orgname={orgname}/>
+
                 <Divider style={{marginBottom:40}}>
                 <Button  onClick={() => setOpen(false)} attached='bottom' type="submit" color="green" >
                     Upload

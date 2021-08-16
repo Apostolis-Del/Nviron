@@ -7,7 +7,7 @@ import ActLikeButton from './ActLikeButton';
 import DeleteAct from './DeleteAct';
 import MyPopup from '../../util/MyPopup';
 
-function ActionCard({act:{id,actName,actDescription,actLocationLat,actLocationLong,actType,likes,likeCount,commentCount,actOwner}}){
+function ActionCard({act:{id,actName,actDescription,actLocationLat,actLocationLong,actType,likes,likeCount,commentCount,actOwner},username}){
 
     //kanoume extract ton user
     const {user} = useContext(AuthContext);
@@ -18,6 +18,11 @@ function ActionCard({act:{id,actName,actDescription,actLocationLat,actLocationLo
     function commentPost(){
         console.log("commented post")
     }
+    console.log("usernamestoactioncard",username)
+    // const onSubmit = (event) => {
+    //     event.preventDefault();
+    //     callback();
+    //   };
     return(
         <Card fluid>
             <Card.Content>
@@ -39,7 +44,7 @@ function ActionCard({act:{id,actName,actDescription,actLocationLat,actLocationLo
                     {
                         //bgazei ena thema me dom nesting edw
                     }
-                <MyPopup content="Comment on Post">
+                <MyPopup content="Comment on Action">
                     <Button labelPosition='right' as={Link} to={`/actions/${id}`}>
                             <Button basic color='blue'>
                                 <Icon name='comments' />
@@ -52,7 +57,7 @@ function ActionCard({act:{id,actName,actDescription,actLocationLat,actLocationLo
                 </MyPopup>
 
                 {//edw tsekare ean o user einai o idioktitis tou post kai ean einai bazoume to delete button
-                 user && user.username === actOwner.username && <DeleteAct actId={id}/>}
+                 user && user.username === actOwner.username && <DeleteAct actId={id} username={username}/>}
             </Card.Content> 
         </Card>
     );

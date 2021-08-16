@@ -1,6 +1,6 @@
 import React,{useContext , useState} from 'react';
 import { useQuery, gql } from '@apollo/client';
-import { Grid,Transition,Modal,Button, GridColumn, Header,Image,Container,Segment,Message } from 'semantic-ui-react';
+import { Grid,Transition,Modal,Button,Icon, GridColumn, Header,Image,Container,Segment,Message } from 'semantic-ui-react';
 import '../App.css';
 import {AuthContext} from '../context/auth';
 import PostCard from '../components/PostCard';
@@ -20,6 +20,7 @@ import SubscribedOrgs from '../components/orgcomponents/SubscribedOrgs'
 import SubscribedOrgsHelper from '../components/orgcomponents/SubscribedOrgsHelper'
 import CardCarousel from "../components/carouselcomponents/CardCarousel";
 import ImageCarousel from "../components/carouselcomponents/ImageCarousel";
+import MyOrganizations from '../components/orgcomponents/MyOrganizations'
 import "pure-react-carousel/dist/react-carousel.es.css";
 
 function Home() {
@@ -48,10 +49,7 @@ function Home() {
     const{ getActionbyOwner: acts} = dataActs? dataActs:[];
 
     //FOR ORGANIZATION OWNER
-    const{loadingOrgsOwner,data: dataOrgs3 } =useQuery(FETCH_ORGANIZATIONS_OWNER_QUERY, {
-        variables: { orgOwner:userName },
-      });
-    const{ getOrganizationsbyOwner: orgsowner} = dataOrgs3? dataOrgs3:[];
+   
 
     if(data){
         console.log(data);
@@ -63,10 +61,7 @@ function Home() {
     if(!loadingActs){
         console.log(acts,"ta acts tou owner");
     }
-    if(dataOrgs3){
-        console.log(orgsowner,"ta orgs tou owner");
-    }
-
+   
 	return (
         <>
 
@@ -79,13 +74,16 @@ function Home() {
     </Container>
     <  Container style={{ margin: 20 }}>
         {user&&(
-    <Grid.Row className="page-title">
-        
-            <h1 style = {{ marginBottom : 20, marginTop:60}}>Check your Environmental Actions or Organizations.</h1>
-            <Grid columns={2} style={{marginTop:20}}divided>
-            <Grid.Column>
+    <Grid.Row className="seven">
+        <h1 style = {{ marginBottom : 20, marginTop:60}}>Check your Environmental Actions or Organizations.</h1>
+
+        <Segment>
+            <Grid columns={2} style={{marginTop:10,marginBottom:10,marginLeft:20,marginRight:20}} divided >
+            <Grid.Column style={{marginLeft:0}}>
+            
             <Modal
-            trigger={<Button>My Actions</Button>}
+            trigger={<Button size='big'color='green' icon labelPosition='left'>
+            <Icon name='tree' />My Actions</Button>}
             header='My Actions.'
             content='Call Benjamin regarding the reports.' 
             //actions={['Snooze', { key: 'done', content: 'Done', positive: true }]}
@@ -101,7 +99,7 @@ function Home() {
                    {
                         acts && acts.map(act=>(
                            <Grid.Column key={act.id} style={{marginBottom:20}}>
-                              <ActionCard act={act}/>
+                              <ActionCard act={act} username={userName}/>
                            </Grid.Column>
                        ))
                    }
@@ -110,47 +108,38 @@ function Home() {
             </Grid>
             </Modal.Content>
             </Modal>
-            <Modal
-            trigger={<Button>My Organizations</Button>}
-            header='My Organizations'
-            content='Call Benjamin regarding the reports.'
-            //actions={['Snooze', { key: 'done', content: 'Done', positive: true }]}
-            >
-             <Modal.Header>My Organizations.</Modal.Header>
-            <Modal.Content>
-            <Grid columns={2} style={{marginTop:20}}divided>
-
-            {loadingOrgsOwner?(
-                <h1>Loading Your Organizations</h1>
-            ):(
-               <Transition.Group>
-                   {
-                        orgsowner && orgsowner.map(org=>(
-                           <Grid.Column key={org.id} style={{marginBottom:20}}>
-                              <OrganizationCard org={org}/>
-                           </Grid.Column>
-                       ))
-                   }
-               </Transition.Group>
-            )}
-            </Grid>
-            </Modal.Content>
-            </Modal>
+            <MyOrganizations userName={userName}/>
             </Grid.Column>
             <Grid.Column>
-            <Modal
-            trigger={<Button>Create a New Organization</Button>}
+                   <OrgForm username={userName}/>
+            {/* <Modal
+              onClose={() => setOpen(false)}
+              onOpen={() => setOpen(true)}
+              open={open}
+            trigger={<Button color='green' icon labelPosition='left'>
+            <Icon name='building' />Create a New Organization</Button>}
             header='My Organizations'
             content='Call Benjamin regarding the reports.'
             //actions={['Snooze', { key: 'done', content: 'Done', positive: true }]}
             >
-             <Modal.Header>Create a New Organization</Modal.Header>
+             <Modal.Header>New Organization</Modal.Header>
             <Modal.Content>
                 <OrgForm />
             </Modal.Content>
-            </Modal>
+            <Modal.Actions>
+                <Button
+                content="Yep, that's me"
+                labelPosition='right'
+                icon='checkmark'
+                onClick={() => setOpen(false)}
+                positive
+                />
+            </Modal.Actions>
+            </Modal> */}
+
             <Modal
-            trigger={<Button>Create a New Action</Button>}
+            trigger={<Button size='big' color='green' icon labelPosition='left'>
+            <Icon name='tree' />New Action</Button>}
             header='My Organizations'
             content='Call Benjamin regarding the reports.'
             //actions={['Snooze', { key: 'done', content: 'Done', positive: true }]}
@@ -162,9 +151,10 @@ function Home() {
             </Modal>   
             </Grid.Column>  
             </Grid>   
+            </Segment>
     </Grid.Row>
     )}
-    <Grid.Row className="page-title">
+    <Grid.Row className="seven">
             <h1 style = {{ marginBottom : 20, marginTop:60}}>Enviromental Actions</h1>
     </Grid.Row>
 
@@ -174,7 +164,7 @@ function Home() {
            
             <Segment>
             <div>
-                    <CustomMap />
+                    <CustomMap username={userName}/>
             </div>
             </Segment>
            
@@ -187,7 +177,7 @@ function Home() {
 
         </Container>
 
-        <Grid.Row className="page-title">
+        <Grid.Row className="seven">
             <h1 style={{marginTop:30,marginBottom:30}}>Browse Recent Actions and Organizations Based on Type</h1>
 
         </Grid.Row>
@@ -196,8 +186,8 @@ function Home() {
         </Segment>
 
         <Grid columns={2} style={{marginTop:20}}divided>
-        <Grid.Row className="page-title">
-            <h1>Recent Posts</h1>
+        <Grid.Row >
+            <h1 className="seven">Recent Posts</h1>
         </Grid.Row>
         <Grid.Row>
             
@@ -226,9 +216,11 @@ function Home() {
         
         {user &&(
             <>
-                <h1 className='page-title'>Subscribed Organizations' Posts</h1>
+            <div className='seven'>
+                <h1 >Subscribed Organizations' Posts</h1>
                 
                 <SubscribedOrgsHelper user={user}/>
+                </div>
             </>
         )
         }
@@ -238,7 +230,7 @@ function Home() {
             user && (
                 <div>
                     <Transition.Group>
-                    <Segment className="page-title">
+                    <Segment className="seven">
                     <h1>Create a new Organization</h1>
                     </Segment>
                     
@@ -254,9 +246,12 @@ function Home() {
         </Container>
         
 
-        <Grid.Row className="page-title">
-            <h1>Recent Organizations' Posts</h1>
-        </Grid.Row>
+        <>
+            <div className='seven'>
+                <h1 >Recent Organizations' Posts</h1>
+                
+                </div>
+            </>
         
         <Grid.Row>
         
@@ -283,25 +278,7 @@ function Home() {
     );
 }
 
-const FETCH_ORGANIZATIONS_OWNER_QUERY = gql`
-query($orgOwner:String!){  
- getOrganizationsbyOwner(orgOwner:$orgOwner){
-     id
-        orgName
-         orgDescription
-   orgLocationLat
-   orgLocationLong
-   orgType
-   orgOwner{
-   username id 
-   }
-   donations{
-     username
-     donateDate
-   }
-}
-}
-`;
+
 const FETCH_ACTIONS_OWNER_QUERY = gql`
    query($username:String!){
     getActionbyOwner(username:$username){
